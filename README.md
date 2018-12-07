@@ -3,8 +3,9 @@
 ### 分工
 
 - 数据库设计： zzx、wzf
+- 需求设计：qzz
 - 后端接口设计：xjx
-- 前端设计：qzz、gjw
+- 前端设计：gjw、qzz
 - ppt：pyk
 - presentation：lht
 
@@ -62,3 +63,10 @@
 	| amount | 金额 | float |  | 否 |  单位：元<br>保留两位小数 |
 	| operateStatus | 操作状态 | tinyint | 4 | 否 | 0-待清分<br>1-已清分 |
 	| requestStatus | 请求状态 | tinyint | 4 | 否 | 若为0，进行缓存 |
+	
+### File Orgnization
+
+```
+|- [dir] AccoutingSystem (code library)
+|- [dir] doc (documents)
+```
