@@ -1,7 +1,7 @@
 package sql_connection;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 
 public class SqlConnection
 {
@@ -10,7 +10,7 @@ public class SqlConnection
 	public enum Table { User, Item, Transaction, Balance }
 	public enum Column { ID, Name, Password, Kind, Price, Amount, ItemID, TotalPrice, UserID, Time, Profit, Date }
 	
-	public SqlConnection(String url, String user, String password) throws Exception
+	public SqlConnection(String url, String user, String password) throws SQLException
 	{
 		connection = DriverManager.getConnection(url, user, password);
 	}
@@ -20,7 +20,7 @@ public class SqlConnection
 	 * @param values 元素
 	 * @throws Exception
 	 */
-	public void insert(Table Table, String[] values) throws Exception
+	public void insert(Table Table, String[] values) throws SQLException
 	{
 		int valueNum = 0;
 		String stmt;
@@ -52,7 +52,7 @@ public class SqlConnection
 	 * @param id ID数组
 	 * @throws Exception
 	 */
-	public void delete(Table Table, int[] id) throws Exception
+	public void delete(Table Table, ArrayList<Integer> id) throws SQLException
 	{
 		String stmt;
 		PreparedStatement pstmt;
@@ -72,7 +72,7 @@ public class SqlConnection
 	 * @param id ID数组
 	 * @throws Exception
 	 */
-	public void update(Table Table, Column Column, String value, int[] id) throws Exception
+	public void update(Table Table, Column Column, String value, ArrayList<Integer> id) throws SQLException
 	{
 		String stmt;
 		PreparedStatement pstmt;
@@ -92,9 +92,8 @@ public class SqlConnection
 	 * @return
 	 * @throws Exception
 	 */
-	public String[] select(Table Table, Column Column, int[] id) throws Exception
+	public ArrayList<String> select(Table Table, Column Column, ArrayList<Integer> id) throws SQLException
 	{
-		String[] ret;
 		ArrayList<String> results = new ArrayList<String>();
 		String stmt;
 		PreparedStatement pstmt;
@@ -107,11 +106,8 @@ public class SqlConnection
 			rs = pstmt.executeQuery();
 			results.add(rs.getString(1));
 		}
-		ret = new String[results.size()];
-		for (int i = 0; i < results.size(); i++)
-			ret[i] = results.get(i);
 		
-		return ret;
+		return results;
 	}
 	
 	/**
@@ -121,9 +117,8 @@ public class SqlConnection
 	 * @return (列名=值)的ID数组
 	 * @throws Exception
 	 */
-	public int[] where(Table Table, Column Column, String value) throws Exception
+	public ArrayList<Integer> where(Table Table, Column Column, String value) throws SQLException
 	{
-		int[] ret;
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		String stmt;
 		PreparedStatement pstmt;
@@ -134,10 +129,7 @@ public class SqlConnection
 		rs = pstmt.executeQuery();
 		while(rs.next())
 			results.add(rs.getInt(1));
-		ret = new int[results.size()];
-		for (int i = 0; i < results.size(); i++)
-			ret[i] = results.get(i);
 		
-		return ret;
+		return results;
 	}
 }
