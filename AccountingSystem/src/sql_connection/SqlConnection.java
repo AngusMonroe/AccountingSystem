@@ -3,6 +3,8 @@ package sql_connection;
 import java.sql.*;
 import java.util.*;
 
+import javax.management.RuntimeErrorException;
+
 public class SqlConnection
 {
 	private Connection connection;
@@ -69,19 +71,29 @@ public class SqlConnection
 	 * @param Table 表名
 	 * @param Column 列名
 	 * @param value 值
-	 * @param id ID数组
+	 * @param id ID
 	 * @throws Exception
 	 */
-	public void update(Table Table, Column Column, String value, ArrayList<Integer> id) throws SQLException
+	public void update(Table Table, Column Column, String value, int id) throws SQLException
 	{
 		String stmt;
 		PreparedStatement pstmt;
 		
-		for (int x : id)
-		{
-			stmt = "UPDATE " + Table + " SET " + Column + " = " + value + " WHERE ID = " + x;
-			pstmt = connection.prepareStatement(stmt);
-			pstmt.execute();
+		stmt = "UPDATE " + Table + " SET " + Column + " = " + value + " WHERE ID = " + id;
+		pstmt = connection.prepareStatement(stmt);
+		pstmt.execute();
+	}
+	
+	public String select(Table Table, Column Column, int id) throws SQLException
+	{
+		ArrayList<Integer> ids = new ArrayList<Integer>(){{
+			add(id);
+		}};
+		ArrayList<String> ans = select(Table, Column, ids);
+		if(ans.size() != 1){
+			throw new SQLException("查不到");
+		}else{
+			return ans.get(0);
 		}
 	}
 	

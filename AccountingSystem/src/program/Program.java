@@ -1,10 +1,7 @@
 package program;
 
-import javax.lang.model.type.IntersectionType;
-
-import java.awt.List;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Set;
 
 import account.User;
 import sql_connection.SqlConnection;
@@ -13,7 +10,7 @@ import sql_connection.SqlConnection.*;
 public class Program
 {
 	private static User currUser;
-	private static SqlConnection sql;
+	public static SqlConnection sql;
 	
 	public static void main(String[] args)
 	{
@@ -43,15 +40,15 @@ public class Program
 		}
 	}
 	
-	public static void Login(String name, String pwd) throws Exception {
-		int[] nameOK =  sql.where(Table.User, Column.Name, "'" + name + "'");
-		int[] pwdOK = sql.where(Table.User, Column.Password, "'" + pwd + "'");
-		int[] findAns = intersect(nameOK, pwdOK);
-		String[] kind = sql.select(Table.User, Column.Kind, findAns);
-		if(kind.length == 0){
+	public static void Login(String name, String pwd) throws SQLException,RuntimeException {
+		ArrayList<Integer> nameOK =  sql.where(Table.User, Column.Name, "'" + name + "'");
+		ArrayList<Integer> pwdOK = sql.where(Table.User, Column.Password, "'" + pwd + "'");
+		ArrayList<Integer> findAns = intersect(nameOK, pwdOK);
+		ArrayList<String> kind = sql.select(Table.User, Column.Kind, findAns);
+		if(kind.size() == 0){
 			throw new RuntimeException("用户名或密码错误");
 		}else{
-			int k = Integer.parseInt(kind[0]);
+			int k = Integer.parseInt(kind.get(0));
 			currUser = new User(k);
 		} 
 	}
@@ -60,21 +57,16 @@ public class Program
 		currUser = null;
 	}
 	
-	public static int[] intersect(int[] a, int[] b){
+	public static ArrayList<Integer> intersect(ArrayList<Integer> nameOK, ArrayList<Integer> pwdOK){
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		for(int i = 0; i<a.length;i++){
-			for(int j = 0; j<b.length;j++){
-				if(a[i] == b[j]){
-					list.add(a[i]);
+		for(int i = 0; i<nameOK.size();i++){
+			for(int j = 0; j<pwdOK.size();j++){
+				if(nameOK.get(i) == pwdOK.get(i)){
+					list.add(nameOK.get(i));
 				}
 			}
 		}
-		
-		int[] ans = new int[list.size()];
-		for(int i =0;i<ans.length;i++){
-			ans[i] = list.get(i);
-		}
-		return ans;
+		return list;
 	}
 	
 }
