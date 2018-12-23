@@ -23,32 +23,63 @@ public class User {
 	}
 	
 	public void sellGoods(int id, int amount) throws SQLException{
+		if(kind != 1 && kind != 0){
+			throw new RuntimeException("permission denied");
+		}
 		String amountStr = Program.sql.select(Table.Item, Column.Amount, id);
 		int preAmount = Integer.parseInt(amountStr);
 		if(preAmount <= amount){
-			throw new RuntimeException("»õÎï²»×ã");
+			throw new RuntimeException("insufficient goods");
 		}
 		int newAmount = preAmount - amount;
 		Program.sql.update(Table.Item, Column.Amount, "'" + newAmount + "'", id);
 	}
 	
 	public void buyGoods(int id, int amount) throws SQLException{
-		sellGoods(id, -amount);
+		if(kind != 2 && kind != 0){
+			throw new RuntimeException("permission denied");
+		}
+		String amountStr = Program.sql.select(Table.Item, Column.Amount, id);
+		int preAmount = Integer.parseInt(amountStr);
+		int newAmount = preAmount + amount;
+		Program.sql.update(Table.Item, Column.Amount, "'" + newAmount + "'", id);
 	}
 	
 	public void getUserTable(){
-		
+		if(kind != 0){
+			throw new RuntimeException("permission denied");
+		}
 	}
 	
-	public void getItemTable(){
-		
+	public void getItemTable(int id){
+		if(kind != 0 && kind != 3){
+			throw new RuntimeException("permission denied");
+		}
 	}
 	
-	public void getTransTable(){
-		
+	public void getTransTable(int id){
+		if(kind != 0 && kind != 3){
+			throw new RuntimeException("permission denied");
+		}
 	}
 	
-	public void getBalanceTable(){
-		
+	public void getBalanceTable(int id){
+		if(kind != 0 && kind != 3){
+			throw new RuntimeException("permission denied");
+		}
+	}
+	
+	public void addUser(String name, String pwd, int kind){
+		if(kind != 0){
+			throw new RuntimeException("permission denied");
+		}
+		//TODO:
+	}
+	
+	public void deleteUser(int id){
+		if(kind != 0){
+			throw new RuntimeException("permission denied");
+		}
+		Program.sql.delete(Table.User, id);
 	}
 }
