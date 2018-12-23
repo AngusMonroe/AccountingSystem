@@ -3,7 +3,7 @@ package sql_connection;
 import java.sql.*;
 import java.util.*;
 
-import javax.management.RuntimeErrorException;
+import data.*;
 
 public class SqlConnection
 {
@@ -22,15 +22,15 @@ public class SqlConnection
 	 * @param values 元素
 	 * @throws Exception
 	 */
-	public void insert(Table Table, String[] values) throws SQLException
+	public void insert(Table table, String[] values) throws SQLException
 	{
 		int valueNum = 0;
 		String stmt;
 		PreparedStatement pstmt;
 		
-		stmt = "INSERT INTO " + Table + " VALUES(";
+		stmt = "INSERT INTO " + table + " VALUES('";
 		
-		switch (Table)
+		switch (table)
 		{
 		case User: valueNum = 4; break;
 		case Item: valueNum = 4; break;
@@ -42,9 +42,9 @@ public class SqlConnection
 		{
 			stmt += values;
 			if(i < values.length - 1)
-				stmt += ", ";
+				stmt += "', '";
 		}
-		stmt += ")";
+		stmt += "')";
 		pstmt = connection.prepareStatement(stmt);
 		pstmt.execute();
 	}
@@ -54,14 +54,14 @@ public class SqlConnection
 	 * @param id ID数组
 	 * @throws Exception
 	 */
-	public void delete(Table Table, ArrayList<Integer> id) throws SQLException
+	public void delete(Table table, ArrayList<String> id) throws SQLException
 	{
 		String stmt;
 		PreparedStatement pstmt;
 		
-		for (int x : id)
+		for (String x : id)
 		{
-			stmt = "DELETE FROM " + Table + " WHERE ID = " + x;
+			stmt = "DELETE FROM " + table + " WHERE ID = '" + x + "'";
 			pstmt = connection.prepareStatement(stmt);
 			pstmt.execute();
 		}
@@ -69,78 +69,104 @@ public class SqlConnection
 	
 	/**
 	 * @param Table 表名
-	 * @param Column 列名
+	 * @param column 列名
 	 * @param value 值
 	 * @param id ID
 	 * @throws Exception
 	 */
-	public void update(Table Table, Column Column, String value, int id) throws SQLException
+	public void update(Table table, Column column, String value, String id) throws SQLException
 	{
 		String stmt;
 		PreparedStatement pstmt;
 		
-		stmt = "UPDATE " + Table + " SET " + Column + " = " + value + " WHERE ID = " + id;
+		stmt = "UPDATE " + table + " SET " + column + " = " + value + " WHERE ID = '" + id + "'";
 		pstmt = connection.prepareStatement(stmt);
 		pstmt.execute();
 	}
 	
-	public String select(Table Table, Column Column, int id) throws SQLException
-	{
-		ArrayList<Integer> ids = new ArrayList<Integer>(){{
-			add(id);
-		}};
-		ArrayList<String> ans = select(Table, Column, ids);
-		if(ans.size() != 1){
-			throw new SQLException("查不到");
-		}else{
-			return ans.get(0);
-		}
-	}
-	
 	/**
 	 * @param Table 表名
-	 * @param Column 列名
+	 * @param column 列名
 	 * @param id ID数组
 	 * @return
 	 * @throws Exception
 	 */
-	public ArrayList<String> select(Table Table, Column Column, ArrayList<Integer> id) throws SQLException
+	public String select(Table table, Column column, String id) throws SQLException
+	{
+		String stmt;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		
+		stmt = "SELECT " + column + " FROM " + table + " WHERE ID = '" + id + "'";
+		pstmt = connection.prepareStatement(stmt);
+		rs = pstmt.executeQuery();
+	
+		return rs.getString(1);
+	}
+	
+	/**
+	 * @param Table 表名
+	 * @param column 列名
+	 * @param id ID数组
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<String> select(Table table, Column column, ArrayList<String> id) throws SQLException
 	{
 		ArrayList<String> results = new ArrayList<String>();
 		String stmt;
 		PreparedStatement pstmt;
 		ResultSet rs;
 		
-		for (int x : id)
+		for (String x : id)
 		{
-			stmt = "SELECT " + Column + " FROM " + Table + " WHERE ID = " + x;
+			stmt = "SELECT " + column + " FROM " + table + " WHERE ID = '" + x + "'";
 			pstmt = connection.prepareStatement(stmt);
 			rs = pstmt.executeQuery();
 			results.add(rs.getString(1));
 		}
-		
 		return results;
 	}
 	
+	public ArrayList<User> selectUser()
+	{
+		return null;
+	}
+	
+	public ArrayList<Item> selectItem()
+	{
+		return null;
+	}
+	
+	public ArrayList<Transaction> selectTransaction()
+	{
+		return null;
+	}
+	
+	public ArrayList<Balance> selectBalance()
+	{
+		return null;
+	}
+	
 	/**
-	 * @param Table 表名
-	 * @param Column 列名
+	 * @param table 表名
+	 * @param column 列名
 	 * @param value 值
 	 * @return (列名=值)的ID数组
 	 * @throws Exception
 	 */
-	public ArrayList<Integer> where(Table Table, Column Column, String value) throws SQLException
+	public ArrayList<String> where(Table table, Column column, String value) throws SQLException
 	{
-		ArrayList<Integer> results = new ArrayList<Integer>();
+		ArrayList<String> results = new ArrayList<String>();
 		String stmt;
 		PreparedStatement pstmt;
 		ResultSet rs;
 		
-		stmt = "SELECT ID FROM " + Table + " WHERE " + Column + " = " + value;
+		stmt = "SELECT ID FROM " + table + " WHERE " + column + " = '" + value + "'";
 		pstmt = connection.prepareStatement(stmt);
 		rs = pstmt.executeQuery();
 		while(rs.next())
-			results.add(rs.getInt(1));
+			results.add(rs.getString(1));
 		
 		return results;
 	}
