@@ -24,19 +24,11 @@ public class SqlConnection
 	 */
 	public void insert(Table table, String[] values) throws SQLException
 	{
-		int valueNum = 0;
 		String stmt;
 		PreparedStatement pstmt;
+		int valueNum = tableValueNum(table);
 		
 		stmt = "INSERT INTO " + table + " VALUES('";
-		
-		switch (table)
-		{
-		case User: valueNum = 4; break;
-		case Item: valueNum = 4; break;
-		case Transaction: valueNum = 7; break;
-		case Balance: valueNum = 3; break;
-		}
 		
 		for (int i = 0; i < valueNum; i++)
 		{
@@ -128,24 +120,80 @@ public class SqlConnection
 		return results;
 	}
 	
-	public ArrayList<User> selectUser()
+	public ArrayList<User> selectUser() throws SQLException
 	{
-		return null;
+		String stmt;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		ArrayList<User> ret = new ArrayList<>();
+		
+		stmt = "SELECT * FROM User";
+		pstmt = connection.prepareStatement(stmt);
+		rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			User user = new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+			ret.add(user);
+		}
+		return ret;
 	}
 	
-	public ArrayList<Item> selectItem()
+	public ArrayList<Item> selectItem() throws SQLException
 	{
-		return null;
+		String stmt;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		ArrayList<Item> ret = new ArrayList<>();
+		
+		stmt = "SELECT * FROM Item";
+		pstmt = connection.prepareStatement(stmt);
+		rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			Item item = new Item(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+			ret.add(item);
+		}
+		return ret;
 	}
 	
-	public ArrayList<Transaction> selectTransaction()
+	public ArrayList<Transaction> selectTransaction() throws SQLException
 	{
-		return null;
+		String stmt;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		ArrayList<Transaction> ret = new ArrayList<>();
+		
+		stmt = "SELECT * FROM Transaction";
+		pstmt = connection.prepareStatement(stmt);
+		rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			Transaction transaction = new Transaction(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+			ret.add(transaction);
+		}
+		return ret;
 	}
 	
-	public ArrayList<Balance> selectBalance()
+	public ArrayList<Balance> selectBalance() throws SQLException
 	{
-		return null;
+		String stmt;
+		PreparedStatement pstmt;
+		ResultSet rs;
+		ArrayList<Balance> ret = new ArrayList<>();
+		
+		stmt = "SELECT * FROM Balance";
+		pstmt = connection.prepareStatement(stmt);
+		rs = pstmt.executeQuery();
+		
+		while(rs.next())
+		{
+			Balance balance = new Balance(rs.getString(1), rs.getString(2), rs.getString(3));
+			ret.add(balance);
+		}
+		return ret;
 	}
 	
 	/**
@@ -169,5 +217,17 @@ public class SqlConnection
 			results.add(rs.getString(1));
 		
 		return results;
+	}
+	
+	private int tableValueNum(Table table)
+	{
+		switch (table)
+		{
+		case User: return 4;
+		case Item: return 4;
+		case Transaction: return 7;
+		case Balance: return 3;
+		}
+		return 0;
 	}
 }
