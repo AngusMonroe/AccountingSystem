@@ -1,5 +1,8 @@
 package data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Balance
 {
 	public String id;
@@ -12,4 +15,17 @@ public class Balance
 		this.profit = profit;
 		this.date = date;
 	}
+	
+	public JSONObject toJSONObject() {
+		JSONObject jsObject = new JSONObject();
+		try {
+			jsObject.put("id", this.id);
+			jsObject.put("profit", this.profit);
+			jsObject.put("date", this.date);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsObject;
+	}
+	
 }

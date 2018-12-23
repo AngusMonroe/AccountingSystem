@@ -1,5 +1,8 @@
 package data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Item
 {
 	public String id;
@@ -13,5 +16,18 @@ public class Item
 		this.name = name;
 		this.price = price;
 		this.amount = amount;
+	}
+	
+	public JSONObject toJSONObject() {
+		JSONObject jsObject = new JSONObject();
+		try {
+			jsObject.put("id", this.id);
+			jsObject.put("name", this.name);
+			jsObject.put("price", this.price);
+			jsObject.put("amount", this.amount);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsObject;
 	}
 }

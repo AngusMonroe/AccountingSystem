@@ -1,5 +1,8 @@
 package data;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class User
 {
 	public String id;
@@ -13,4 +16,18 @@ public class User
 		this.password = password;
 		this.kind = kind;
 	}
+	
+	public JSONObject toJSONObject() {
+		JSONObject jsObject = new JSONObject();
+		try {
+			jsObject.put("id", this.id);
+			jsObject.put("name", this.name);
+			jsObject.put("password", this.password);
+			jsObject.put("kind", this.kind);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsObject;
+	}
+	
 }

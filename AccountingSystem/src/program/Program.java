@@ -41,24 +41,22 @@ public class Program
 	}
 	
 	public static void Login(String name, String pwd) throws SQLException,RuntimeException {
-		ArrayList<Integer> nameOK =  sql.where(Table.User, Column.Name, "'" + name + "'");
-		ArrayList<Integer> pwdOK = sql.where(Table.User, Column.Password, "'" + pwd + "'");
-		ArrayList<Integer> findAns = intersect(nameOK, pwdOK);
-		ArrayList<String> kind = sql.select(Table.User, Column.Kind, findAns);
-		if(kind.size() == 0){
+		ArrayList<String> nameOK =  sql.where(Table.User, Column.Name, name);
+		ArrayList<String> pwdOK = sql.where(Table.User, Column.Password, pwd);
+		ArrayList<String> findID = intersect(nameOK, pwdOK);
+		if(findID.size() != 0){
 			throw new RuntimeException("用户名或密码错误");
-		}else{
-			int k = Integer.parseInt(kind.get(0));
-			currUser = new User(k);
-		} 
+		}
+		String kind = sql.select(Table.User, Column.Kind, findID.get(0));
+		currUser = new User(Integer.parseInt(kind), findID.get(0));
 	}
 	
 	public static void Logout(){
 		currUser = null;
 	}
 	
-	public static ArrayList<Integer> intersect(ArrayList<Integer> nameOK, ArrayList<Integer> pwdOK){
-		ArrayList<Integer> list = new ArrayList<Integer>();
+	public static ArrayList<String> intersect(ArrayList<String> nameOK, ArrayList<String> pwdOK){
+		ArrayList<String> list = new ArrayList<String>();
 		for(int i = 0; i<nameOK.size();i++){
 			for(int j = 0; j<pwdOK.size();j++){
 				if(nameOK.get(i) == pwdOK.get(i)){
