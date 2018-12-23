@@ -128,23 +128,23 @@ public class User {
 		}
 	}
 	
-	public String getBalanceTable(int id) throws SQLException{
+	public String getBalanceTable() throws SQLException{
 		if(kind != 0 && kind != 3){
 			throw new RuntimeException("permission denied");
 		}
-		ArrayList<Balance> bals = Program.sql.selectBalance();
-		Balance ans = null;
-		for(Balance bal : bals) {
-			if(bal.id == ""+id){
-				ans = bal;
-				break;
+		Double total = 0.0;
+		ArrayList<Transaction> trans = Program.sql.selectTransaction();
+		for(Transaction tran : trans) {
+			if(tran.time == new Date().toString()){
+				if (tran.kind == "0") {
+					total -= Double.parseDouble(tran.totalPrice);
+				}else {
+					total += Double.parseDouble(tran.totalPrice);
+				}
 			}
 		}
-		if(ans == null) {
-			throw new RuntimeException("error id");
-		}else{
-			return ans.toJSONObject().toString();
-		}
+		Balance bal = new Balance(nextBalID(), ""+total, new Date().toString());
+		return bal.toJSONObject().toString();
 	}
 	
 	public void addUser(String name, String pwd, String userKind) throws SQLException{

@@ -26,7 +26,7 @@
   
 * 交易记录表（Transaction）
   * 序号（ID: INT）：主键
-  * 类型（Kind: VARCHAR）：进货|出售
+  * 类型（Kind: VARCHAR）：进货|出售 0|1
   * 货物序号（ItemID: INT）：外键
   * 数量（Amount：INT）
   * 交易额（TotalPrice: DOUBLE）：TotalPrice = Amount * Item[ItemID].Price【是个冗余，但感觉记一下比较方便？】
