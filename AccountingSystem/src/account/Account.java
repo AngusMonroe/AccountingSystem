@@ -1,6 +1,7 @@
 package account;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -13,11 +14,11 @@ import org.json.JSONObject;
 import data.Balance;
 import data.Item;
 import data.Transaction;
-import program.Program;
+import program.AccountManager;
 import sql_connection.SqlConnection.Column;
 import sql_connection.SqlConnection.Table;
 
-public class User {
+public class Account {
 	
 	/** 0: Administrator 
 	 *  1: Seller
@@ -27,7 +28,7 @@ public class User {
 	private int kind;
 	private String userID;
 	
-	public User(int kind, String userID) {
+	public Account(int kind, String userID) {
 		this.kind = kind;
 		this.userID = userID;
 	}
@@ -36,7 +37,7 @@ public class User {
 		if(kind != 1 && kind != 0){
 			throw new RuntimeException("permission denied");
 		}
-		String preAmount = Program.sql.select(Table.Item, Column.Amount, id);
+		String preAmount = AccountManager.sql.select(Table.Item, Column.Amount, id);
 		int _preAmount = Integer.parseInt(preAmount);
 		int _amount = Integer.parseInt(amount);
 		if(_preAmount <= _amount){
@@ -45,30 +46,34 @@ public class User {
 		int _newAmount = _preAmount - _amount;
 		
 		// 更新Item
-		Program.sql.update(Table.Item, Column.Amount, ""+_newAmount, id);
+		AccountManager.sql.update(Table.Item, Column.Amount, ""+_newAmount, id);
 		// 更新Trans
-		String price = Program.sql.select(Table.Item, Column.Price, id);
+		String price = AccountManager.sql.select(Table.Item, Column.Price, id);
 		Double totalPrice = _amount * Double.parseDouble(price);
-		String[] trans = {nextTranID(), "0", id, amount, ""+totalPrice, userID, new Date().toString()};
-		Program.sql.insert(Table.Transaction, trans);
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");   
+		String date = sdf.format(new Date());
+		String[] trans = {nextTranID(), "0", id, amount, ""+totalPrice, userID, date};
+		AccountManager.sql.insert(Table.Transaction, trans);
 	}
 	
 	public void buyGoods(String id, String amount) throws SQLException{
 		if(kind != 2 && kind != 0){
 			throw new RuntimeException("permission denied");
 		}
-		String preAmount = Program.sql.select(Table.Item, Column.Amount, id);
+		String preAmount = AccountManager.sql.select(Table.Item, Column.Amount, id);
 		int _preAmount = Integer.parseInt(preAmount);
 		int _amount = Integer.parseInt(amount);
 		int _newAmount = _preAmount + _amount;
 		
 		// 更新Item
-		Program.sql.update(Table.Item, Column.Amount, ""+_newAmount, id);
+		AccountManager.sql.update(Table.Item, Column.Amount, ""+_newAmount, id);
 		// 更新Trans
-		String price = Program.sql.select(Table.Item, Column.Price, id);
+		String price = AccountManager.sql.select(Table.Item, Column.Price, id);
 		Double totalPrice = _amount * Double.parseDouble(price);
-		String[] trans = {nextTranID(), "1", id, amount, ""+totalPrice, userID, new Date().toString()};
-		Program.sql.insert(Table.Transaction, trans);
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");   
+		String date = sdf.format(new Date());
+		String[] trans = {nextTranID(), "1", id, amount, ""+totalPrice, userID, date};
+		AccountManager.sql.insert(Table.Transaction, trans);
 	}
 	
 	public String getUserTable() throws SQLException{
@@ -76,7 +81,7 @@ public class User {
 			throw new RuntimeException("permission denied");
 		}
 		
-		ArrayList<data.User> users = Program.sql.selectUser();
+		ArrayList<data.User> users = AccountManager.sql.selectUser();
 		int index = 0;
 		JSONArray jsArray = new JSONArray();
 		for(data.User user : users){
@@ -90,12 +95,12 @@ public class User {
 		return jsArray.toString();
 	}
 	
-	public String getItemTable(int id) throws SQLException{
+	public String getItemTable() throws SQLException{
 		if(kind != 0 && kind != 3){
 			throw new RuntimeException("permission denied");
 		}
 		
-		ArrayList<Item> items = Program.sql.selectItem();
+		ArrayList<Item> items = AccountManager.sql.selectItem();
 		int index = 0;
 		JSONArray jsArray = new JSONArray();
 		for(data.Item item : items){
@@ -109,14 +114,14 @@ public class User {
 		return jsArray.toString();
 	}
 	
-	public String getTransTable(int id) throws SQLException{
+	public String getTransTable(String id) throws SQLException{
 		if(kind != 0 && kind != 3){
 			throw new RuntimeException("permission denied");
 		}
-		ArrayList<Transaction> trans = Program.sql.selectTransaction();
+		ArrayList<Transaction> trans = AccountManager.sql.selectTransaction();
 		Transaction ans = null;
 		for(Transaction tran : trans) {
-			if(tran.id == ""+id){
+			if(tran.id.equals(id)){
 				ans = tran;
 				break;
 			}
@@ -133,17 +138,19 @@ public class User {
 			throw new RuntimeException("permission denied");
 		}
 		Double total = 0.0;
-		ArrayList<Transaction> trans = Program.sql.selectTransaction();
+		ArrayList<Transaction> trans = AccountManager.sql.selectTransaction();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");   
+		String date = sdf.format(new Date());
 		for(Transaction tran : trans) {
-			if(tran.time == new Date().toString()){
-				if (tran.kind == "0") {
+			if(tran.time.equals(date)){
+				if (tran.kind.equals("0")) {
 					total -= Double.parseDouble(tran.totalPrice);
 				}else {
 					total += Double.parseDouble(tran.totalPrice);
 				}
 			}
 		}
-		Balance bal = new Balance(nextBalID(), ""+total, new Date().toString());
+		Balance bal = new Balance(nextBalID(), ""+total, date);
 		return bal.toJSONObject().toString();
 	}
 	
@@ -151,13 +158,13 @@ public class User {
 		if(kind != 0){
 			throw new RuntimeException("permission denied");
 		}
-		ArrayList<data.User> users = Program.sql.selectUser();
+		ArrayList<data.User> users = AccountManager.sql.selectUser();
 		String[] values = new String[4];
 		values[0] = nextUserID();
 		values[1] = name;
 		values[2] = pwd;
 		values[3] = userKind;
-		Program.sql.insert(Table.User, values);
+		AccountManager.sql.insert(Table.User, values);
 	}
 	
 	public void deleteUser(String id) throws SQLException{
@@ -167,54 +174,58 @@ public class User {
 		ArrayList<String> ids = new ArrayList<String>(){{
 			add(id);
 		}};
-		Program.sql.delete(Table.User, ids);
+		AccountManager.sql.delete(Table.User, ids);
 	}
 	
 	private String nextUserID() throws SQLException{
 		int max = 1;
-		ArrayList<data.User> users = Program.sql.selectUser();
+		ArrayList<data.User> users = AccountManager.sql.selectUser();
 		for(data.User user : users) {
 			int id = Integer.parseInt(user.id);
 			if(id > max) {
 				max = id;
 			}
 		}
+		max++;
 		return ""+max;
 	}
 	
 	private String nextBalID() throws SQLException{
 		int max = 1;
-		ArrayList<Balance> bals = Program.sql.selectBalance();
+		ArrayList<Balance> bals = AccountManager.sql.selectBalance();
 		for(Balance bal : bals) {
 			int id = Integer.parseInt(bal.id);
 			if(id > max) {
 				max = id;
 			}
 		}
+		max++;
 		return ""+max;
 	}
 	
 	private String nextItemID() throws SQLException{
 		int max = 1;
-		ArrayList<Item> items = Program.sql.selectItem();
+		ArrayList<Item> items = AccountManager.sql.selectItem();
 		for(Item item : items) {
 			int id = Integer.parseInt(item.id);
 			if(id > max) {
 				max = id;
 			}
 		}
+		max++;
 		return ""+max;
 	}
 	
 	private String nextTranID() throws SQLException{
 		int max = 1;
-		ArrayList<Transaction> trans = Program.sql.selectTransaction();
+		ArrayList<Transaction> trans = AccountManager.sql.selectTransaction();
 		for(Transaction tran : trans) {
 			int id = Integer.parseInt(tran.id);
 			if(id > max) {
 				max = id;
 			}
 		}
+		max++;
 		return ""+max;
 	}
 }

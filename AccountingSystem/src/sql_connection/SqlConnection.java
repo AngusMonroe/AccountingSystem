@@ -32,11 +32,12 @@ public class SqlConnection
 		
 		for (int i = 0; i < valueNum; i++)
 		{
-			stmt += values;
+			stmt += values[i];
 			if(i < values.length - 1)
 				stmt += "', '";
 		}
 		stmt += "')";
+		
 		pstmt = connection.prepareStatement(stmt);
 		pstmt.execute();
 	}
@@ -91,9 +92,13 @@ public class SqlConnection
 		
 		stmt = "SELECT " + column + " FROM " + table + " WHERE ID = '" + id + "'";
 		pstmt = connection.prepareStatement(stmt);
+		System.out.println(stmt);
 		rs = pstmt.executeQuery();
-	
-		return rs.getString(1);
+		
+		if(rs.next())
+			return rs.getString(1);
+		else
+			throw new RuntimeException("miss");
 	}
 	
 	/**
@@ -114,6 +119,7 @@ public class SqlConnection
 		{
 			stmt = "SELECT " + column + " FROM " + table + " WHERE ID = '" + x + "'";
 			pstmt = connection.prepareStatement(stmt);
+			System.out.println(stmt);
 			rs = pstmt.executeQuery();
 			results.add(rs.getString(1));
 		}
@@ -129,6 +135,7 @@ public class SqlConnection
 		
 		stmt = "SELECT * FROM User";
 		pstmt = connection.prepareStatement(stmt);
+		System.out.println(stmt);
 		rs = pstmt.executeQuery();
 		
 		while(rs.next())
@@ -148,6 +155,7 @@ public class SqlConnection
 		
 		stmt = "SELECT * FROM Item";
 		pstmt = connection.prepareStatement(stmt);
+		System.out.println(stmt);
 		rs = pstmt.executeQuery();
 		
 		while(rs.next())
@@ -167,6 +175,7 @@ public class SqlConnection
 		
 		stmt = "SELECT * FROM Transaction";
 		pstmt = connection.prepareStatement(stmt);
+		System.out.println(stmt);
 		rs = pstmt.executeQuery();
 		
 		while(rs.next())
@@ -186,6 +195,7 @@ public class SqlConnection
 		
 		stmt = "SELECT * FROM Balance";
 		pstmt = connection.prepareStatement(stmt);
+		System.out.println(stmt);
 		rs = pstmt.executeQuery();
 		
 		while(rs.next())
@@ -212,6 +222,7 @@ public class SqlConnection
 		
 		stmt = "SELECT ID FROM " + table + " WHERE " + column + " = '" + value + "'";
 		pstmt = connection.prepareStatement(stmt);
+		System.out.println(stmt);
 		rs = pstmt.executeQuery();
 		while(rs.next())
 			results.add(rs.getString(1));

@@ -1,28 +1,21 @@
 package program;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import account.User;
 import sql_connection.SqlConnection;
-import sql_connection.SqlConnection.*;
+import sql_connection.SqlConnection.Table;
 
 public class Program
 {
-	private static User currUser;
-	public static SqlConnection sql;
-	
 	public static void main(String[] args)
 	{
 		try 
 		{
 			String server = "localhost";
 			String port = "3306";
-			String database = "css";
-			String username = "ruangong";
-			String password = "ruangong";
+			String database = "AccountingSystem";
+			String username = "root";
+			String password = "root";
 			
-			sql = new SqlConnection
+			AccountManager.sql = new SqlConnection
 					(
 						"jdbc:mysql://" + 
 						server +  ":" +
@@ -31,40 +24,23 @@ public class Program
 						username, 
 						password
 					);
+//			String[] s1 = {"111","Apple","8.8","10"};
+//			String[] s2 = {"222","Banana","9.9","5"};
+//			String[] s3 = {"333","Grape","1.1","7"};
+//			AccountManager.sql.insert(Table.Item, s1);
+//			AccountManager.sql.insert(Table.Item, s2);
+//			AccountManager.sql.insert(Table.Item, s3);
+			AccountManager.Login("Zhang", "456");
+			AccountManager.currUser.buyGoods("111", "7");
+			AccountManager.currUser.sellGoods("222", "1");
+			System.out.println(AccountManager.currUser.getItemTable());
+			System.out.println(AccountManager.currUser.getBalanceTable());
+			System.out.println(AccountManager.currUser.getTransTable("1"));
 			
-			sql.update(Table.User, Column.Password, "'123456'", sql.where(Table.User, Column.Name, "'Wang'"));
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
-	
-	public static void Login(String name, String pwd) throws SQLException,RuntimeException {
-		ArrayList<String> nameOK =  sql.where(Table.User, Column.Name, name);
-		ArrayList<String> pwdOK = sql.where(Table.User, Column.Password, pwd);
-		ArrayList<String> findID = intersect(nameOK, pwdOK);
-		if(findID.size() != 0){
-			throw new RuntimeException("用户名或密码错误");
-		}
-		String kind = sql.select(Table.User, Column.Kind, findID.get(0));
-		currUser = new User(Integer.parseInt(kind), findID.get(0));
-	}
-	
-	public static void Logout(){
-		currUser = null;
-	}
-	
-	public static ArrayList<String> intersect(ArrayList<String> nameOK, ArrayList<String> pwdOK){
-		ArrayList<String> list = new ArrayList<String>();
-		for(int i = 0; i<nameOK.size();i++){
-			for(int j = 0; j<pwdOK.size();j++){
-				if(nameOK.get(i) == pwdOK.get(i)){
-					list.add(nameOK.get(i));
-				}
-			}
-		}
-		return list;
-	}
-	
 }
