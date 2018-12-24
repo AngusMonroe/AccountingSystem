@@ -16,6 +16,10 @@ export default new Router({
       component: () =>import('./components/MainPage.vue'),
       children: [
         {
+          path:'',
+          component:()=>import('./components/pages/DashBoard.vue')
+        },
+        {
           path: 'cargoInfo',
           component:() =>import('./components/pages/CargoInfo.vue')
         },
@@ -38,6 +42,14 @@ export default new Router({
         {
           path:'accountant/generalJournal',
           component:() => import('./components/pages/Journal.vue')
+        },
+        {
+          path:'admin/userList',
+          component:()=> import('./components/pages/UserList.vue')
+        },
+        {
+          path:'admin/addUser',
+          component:()=> import('./components/pages/AddUser.vue')
         }
       ]
     },

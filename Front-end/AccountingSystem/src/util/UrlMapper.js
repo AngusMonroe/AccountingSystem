@@ -41,7 +41,7 @@ export function mockResult(inputUrl){
             "msg":"OK",
             "data":{
                 "username":"tom",
-                "kind":"seller"   //用户类型: seller:售货员 buyer:采购员 accountant 会计   admin管理员
+                "kind":"admin"   //用户类型: seller:售货员 buyer:采购员 accountant 会计   admin管理员
             }
         }],
         ['logout',{
@@ -138,8 +138,20 @@ export function mockResult(inputUrl){
             "data":{
                 "detailList":[
                     {
-                        "date":"2012-11-20",
+                        "date":"2018-11-20",
                         "sum":12
+                    },
+                    {
+                        "date":"2018-11-21",
+                        "sum":19
+                    },
+                    {
+                        "date":"2018-12-22",
+                        "sum":10
+                    },
+                    {
+                        "date":"2018-12-23",
+                        "sum":39
                     }
                 ]
             }

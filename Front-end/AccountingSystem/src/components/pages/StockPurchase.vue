@@ -147,10 +147,10 @@ export default {
   data: function() {
     return {
       cargoList: null,
-      purchaseId,
-      amount: 0,
-      cargoName: "",
-      cargoPrice: 0
+      purchaseId:0,
+      amount:0,
+      cargoName:'',
+      cargoPrice:0
     };
   },
   created: function() {
@@ -159,14 +159,12 @@ export default {
   mounted: function() {
     setTimeout(() => {
       var M = require("imports-loader?$=jquery!materialize-css");
-      var instance = M.Modal.getInstance(
-        document.getElementById("purchaseModal")
-      );
-      if (!instance) {
-        console.log("fail");
-        history.go(0);
-      }
-    }, 50);
+      var elem = document.getElementById("purchaseModal");
+      M.Modal.init(elem);
+      elem = document.getElementById("addModal");
+      M.Modal.init(elem);
+      
+    }, 400);
   },
   methods: {
     getList: function() {
@@ -195,14 +193,18 @@ export default {
     },
     showAddCargo: function() {
       var M = require("materialize-css");
-      console.log(document.getElementById("addModal"));
+      
       var instance = M.Modal.getInstance(document.getElementById("addModal"));
       instance.open();
     },
     addCargo: function() {
+      if(this.cargoName==""||this.cargoPrice==0){
+        this.$toast("Please Enter valid data");
+        return;
+      }
       var payload = {
         name: this.cargoName,
-        price: this.cargoPrice
+        price: parseFloat(this.cargoPrice)
       };
       this.$post("item_add", payload, data => {
         this.$toast("Add Cargo Success");

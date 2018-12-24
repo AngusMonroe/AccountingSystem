@@ -50,17 +50,7 @@
             <li class="li-hover">
               <div class="divider"></div>
             </li>
-            <li class="li-hover">
-              <p class="ultra-small margin more-text">General Information</p>
-            </li>
-            <li class="bold"><a
-                href="index.html"
-                class="waves-effect waves-cyan"
-              ><i class="mdi-action-dashboard"></i> Dashboard</a>
-            </li>
-            <li class="li-hover">
-              <div class="divider"></div>
-            </li>
+
             <li class="li-hover">
               <p class="ultra-small margin more-text">Cargo Management</p>
             </li>
@@ -71,14 +61,25 @@
               ><i class="mdi-editor-insert-comment"></i> Cargo Information</router-link>
             </li>
 
-            <li class="no-padding">
+            <li
+              class="no-padding"
+              v-if="kind=='seller'||kind=='buyer'||kind=='admin'"
+            >
               <ul class="collapsible collapsible-accordion">
                 <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-invert-colors"></i> Cargo Management</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><router-link to="/main/stockPurchase">Stock purchase</router-link >
+                      <li>
+                        <router-link
+                          to="/main/stockPurchase"
+                          v-if="kind=='buyer'||kind=='admin'"
+                        >Stock purchase</router-link>
                       </li>
-                      <li><router-link to="/main/shipment">Shipment manage</router-link>
+                      <li>
+                        <router-link
+                          to="/main/shipment"
+                          v-if="kind=='seller'||kind=='admin'"
+                        >Shipment manage</router-link>
                       </li>
 
                     </ul>
@@ -91,17 +92,25 @@
             <li class="li-hover">
               <div class="divider"></div>
             </li>
-            <li class="li-hover">
+            <li
+              class="li-hover"
+              v-if="kind=='accountant'||kind=='admin'"
+            >
               <p class="ultra-small margin more-text">Accountant</p>
             </li>
-            <li class="no-padding">
+            <li
+              class="no-padding"
+              v-if="kind=='accountant'||kind=='admin'"
+            >
               <ul class="collapsible collapsible-accordion">
                 <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-chart"></i> Accountant Properties</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><router-link to="/main/accountant/cargoInfo">Cargo Information</router-link>
+                      <li>
+                        <router-link to="/main/accountant/cargoInfo">Cargo Information</router-link>
                       </li>
-                      <li><router-link to="/main/accountant/generalJournal">General journal</router-link>
+                      <li>
+                        <router-link to="/main/accountant/generalJournal">General journal</router-link>
                       </li>
 
                     </ul>
@@ -114,17 +123,25 @@
             <li class="li-hover">
               <div class="divider"></div>
             </li>
-            <li class="li-hover">
+            <li
+              class="li-hover"
+              v-if="kind == 'admin'"
+            >
               <p class="ultra-small margin more-text">User Management</p>
             </li>
-            <li class="no-padding">
+            <li
+              class="no-padding"
+              v-if="kind == 'admin'"
+            >
               <ul class="collapsible collapsible-accordion">
                 <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-swap-vert-circle"></i> User Management</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="css-typography.html">Manage Current User</a>
+                      <li>
+                        <router-link to="/main/admin/userList">Manage Current User</router-link>
                       </li>
-                      <li><a href="css-icons.html">Add new user</a>
+                      <li>
+                        <router-link to="/main/admin/addUser">Add new user</router-link>
                       </li>
 
                     </ul>
@@ -146,9 +163,9 @@
         <!-- //////////////////////////////////////////////////////////////////////////// -->
         <!-- START CONTENT -->
         <section id="content">
-              <router-view></router-view>
-              <!--work collections end-->
-              
+          <router-view></router-view>
+          <!--work collections end-->
+
         </section>
         <!-- END CONTENT -->
 
@@ -157,7 +174,7 @@
 
     </div>
 
-    <br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br>
     <!-- END MAIN -->
     <!-- //////////////////////////////////////////////////////////////////////////// -->
     <!-- START FOOTER -->
@@ -172,8 +189,6 @@
     </footer>
     <!-- END FOOTER -->
 
-    
-
   </div>
 </template>
 
@@ -183,7 +198,7 @@ export default {
     return {
       username: "",
       kind: "",
-      showRouter:false
+      showRouter: false
     };
   },
   beforeCreate: function() {
@@ -195,21 +210,18 @@ export default {
     }
   },
   mounted: function() {
-    M = require("imports-loader?$=jquery!materialize-css");
-    var elems = document.querySelectorAll(".collapsible");
-    M.Collapsible.init(elems);
-
-    elems = document.querySelectorAll(".dropdown-button");
-    M.Dropdown.init(elems);
-
     setTimeout(() => {
-      elems = document.getElementById("slide-out")
+      M = require("imports-loader?$=jquery!materialize-css");
+      var elems = document.querySelectorAll(".collapsible");
+      M.Collapsible.init(elems);
+
+      elems = document.querySelectorAll(".dropdown-button");
+      M.Dropdown.init(elems);
+      elems = document.getElementById("slide-out");
       console.log(elems);
       M.Sidenav.init(elems);
-    }, 200);
-    
-    M.AutoInit();
-    
+      
+    }, 300);
 
     this.username = sessionStorage.getItem("user");
     this.kind = sessionStorage.getItem("kind");

@@ -97,13 +97,17 @@
                     <div>
                       <span class="chart-title white-text">Revenue</span>
                       <div class="chart-revenue cyan darken-2 white-text">
-                        <p class="chart-revenue-total">$4,500.85</p>
-                        <p class="chart-revenue-per"><i class="mdi-navigation-arrow-drop-up"></i> 21.80 %</p>
+                        <p class="chart-revenue-total">${{totalProfit}}</p>
+
                       </div>
                       <div class="switch chart-revenue-switch right">
                         <label class="cyan-text text-lighten-5">
                           Month
-                          <input type="checkbox">
+                          <input
+                            type="checkbox"
+                            v-model="filterButton"
+                            @click="changeFilter"
+                          >
                           <span class="lever"></span> Year
                         </label>
                       </div>
@@ -118,130 +122,22 @@
                 </div>
                 <div class="card-content">
                   <a class="btn-floating btn-move-up waves-effect waves-light darken-2 right"><i class="mdi-content-add activator"></i></a>
-                  <div class="col s12 m3 l3">
-                    <div id="doughnut-chart-wrapper">
-                      <canvas
-                        id="doughnut-chart"
-                        height="200"
-                      ></canvas>
-                      <div class="doughnut-chart-status">4500
-                        <p class="ultra-small center-align">Sold</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col s12 m2 l2">
-                    <ul class="doughnut-chart-legend">
-                      <li class="mobile ultra-small"><span class="legend-color"></span>Mobile</li>
-                      <li class="kitchen ultra-small"><span class="legend-color"></span> Kitchen</li>
-                      <li class="home ultra-small"><span class="legend-color"></span> Home</li>
-                    </ul>
-                  </div>
-                  <div class="col s12 m5 l6">
-                    <div class="trending-bar-chart-wrapper">
-                      <canvas
-                        id="trending-bar-chart"
-                        height="90"
-                      ></canvas>
-                    </div>
-                  </div>
+
                 </div>
 
                 <div class="card-reveal">
-                  <span class="card-title grey-text text-darken-4">Revenue by Month <i class="mdi-navigation-close right"></i></span>
+                  <span class="card-title grey-text text-darken-4">Revenue<i class="mdi-navigation-close right"></i></span>
                   <table class="responsive-table">
                     <thead>
-                      <tr>
-                        <th data-field="id">ID</th>
-                        <th data-field="month">Month</th>
-                        <th data-field="item-sold">Item Sold</th>
-                        <th data-field="item-price">Item Price</th>
-                        <th data-field="total-profit">Total Profit</th>
+                      <tr>                        
+                        <th data-field="date">Date</th>
+                        <th data-field="sum">Sum</th>                        
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>January</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>February</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>March</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>April</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>May</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>6</td>
-                        <td>June</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>7</td>
-                        <td>July</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>8</td>
-                        <td>August</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>9</td>
-                        <td>Septmber</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>10</td>
-                        <td>Octomber</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>11</td>
-                        <td>November</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
-                      </tr>
-                      <tr>
-                        <td>12</td>
-                        <td>December</td>
-                        <td>122</td>
-                        <td>100</td>
-                        <td>$122,00.00</td>
+                    <tbody v-if="detailList">
+                      <tr v-for="detail in detailList" >
+                        <td>{{detail.date}}</td>
+                        <td>{{detail.sum}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -254,11 +150,9 @@
         </div>
         <!--chart dashboard end-->
 
-        <br><br><br><br><br><br><br><br><br><br><br><br><br>
       </div>
     </div>
     <!--end container-->
-    <br><br><br><br><br><br><br><br><br><br><br><br><br>
 
     <!-- //////////////////////////////////////////////////////////////////////////// -->
   </div>
@@ -274,14 +168,18 @@ export default {
       totalValue: 0,
       cargoCategories: 0,
       averagePrice: 0,
-      chartData:{
+      totalProfit: 0,
+      filterButton: false,
+      trandingLineChart: null,
+      detailList:null,
+      chartData: {
         labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY"],
         datasets: [
           {
             label: "Profit",
-            pointBorderColor:"#00bcd4",
-            borderColor:"#ffffff",
-            backgroundColor:"rgba(128, 222, 234, 0.6)",
+            pointBorderColor: "#00bcd4",
+            borderColor: "#ffffff",
+            backgroundColor: "rgba(128, 222, 234, 0.6)",
             data: [1, 5, 2, 4, 8, 5, 8]
           }
         ]
@@ -292,38 +190,75 @@ export default {
     this.getList();
     var now = new Date();
     var last = new Date();
-    last.setMonth(last.getMonth()-1);
-    this.getProfit(last,now);
+    last.setMonth(last.getMonth() - 1);
+    this.getProfit(last, now);
   },
-  mounted: function() {
-    setTimeout(() => {     
-      var trendingLineChart = document
-        .getElementById("trending-line-chart")
-        .getContext("2d");
-      window.trandingLineChart = new Chart(trendingLineChart, {
-        type: "line",
-        data: this.chartData,
-        options: {
-          
-        }
-      });
-    }, 200);
-  },
+  mounted: function() {},
   methods: {
+    changeFilter: function() {
+      setTimeout(() => {
+        var now = new Date();
+        var last = new Date();
+        if (this.filterButton) {
+          last.setFullYear(last.getFullYear() - 1);
+        } else {
+          last.setMonth(last.getMonth() - 1);
+        }
+        this.getProfit(last, now);
+      }, 20);
+    },
     getList: function() {
       this.$post("item_getList", null, data => {
         this.cargoList = data.items;
         this.analyse();
       });
     },
-    getProfit: function(start,end){        
-        var payload = {
-            end:end.format("yyyy-MM-dd"),
-            start:start.format("yyyy-MM-dd")
-        };
-        this.$post("getSummary",payload,data=>{
-            
-        })
+    getProfit: function(start, end) {
+      var payload = {};
+
+      this.$post("getSummary", payload, data => {
+        this.chartData.labels = [];
+        this.chartData.datasets[0].data = [];
+        this.totalProfit = 0;
+        var dataList = data.detailList;
+        this.detailList = data.detailList;
+        for (var i in dataList) {
+          var data = dataList[i];
+          var fmt = "yyyy-MM-dd";
+          var str = data.date;
+          //fmt为日期格式,str为日期字符串
+          var reg = /([yMd]+)/g; //日期格式中的字符
+          var key = {};
+          var tmpkeys = fmt.match(reg);
+          for (var i = 0; i < tmpkeys.length; i++) {
+            key[tmpkeys[i].substr(0, 1)] = i + 1;
+          }
+          var r = str.match(fmt.replace(reg, "(\\d+)"));
+          var date = new Date(r[key["y"]], r[key["M"]] - 1, r[key["d"]]);
+          console.log(date);
+          if (date < start || date > end) {
+            continue;
+          }
+          this.chartData.labels.push(data.date);
+          this.chartData.datasets[0].data.push(data.sum);
+          this.totalProfit += data.sum;
+          if (this.trandingLineChart) {
+            this.trandingLineChart.data = this.chartData;
+            this.trandingLineChart.update();
+          } else {
+            setTimeout(() => {
+              var trendingLineChart = document
+                .getElementById("trending-line-chart")
+                .getContext("2d");
+              this.trandingLineChart = new Chart(trendingLineChart, {
+                type: "line",
+                data: this.chartData,
+                options: {}
+              });
+            }, 100);
+          }
+        }
+      });
     },
     analyse: function() {
       for (var i = 0; i < this.cargoList.length; i++) {

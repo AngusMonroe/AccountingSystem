@@ -57,7 +57,6 @@
                   </tr>
                 </tbody>
               </table>
-              
 
             </div>
           </div>
@@ -97,16 +96,15 @@
       </div>
     </div>
 
-    
-
   </div>
 </template>
 <script>
 export default {
+  
   data: function() {
     return {
       cargoList: null,
-      sellId,
+      sellId:0,
       amount: 0,
       cargoName: "",
       cargoPrice: 0
@@ -118,14 +116,9 @@ export default {
   mounted: function() {
     setTimeout(() => {
       var M = require("materialize-css");
-      var instance = M.Modal.getInstance(
-        document.getElementById("sellModal")
-      );
-      if (!instance) {
-        console.log("fail");
-        history.go(0);
-      }
-    }, 50);
+      var elem = document.getElementById("sellModal")
+      M.Modal.init(elem);      
+    }, 100);
   },
   methods: {
     getList: function() {
@@ -136,9 +129,7 @@ export default {
     showSell: function(id) {
       //var M = require("materialize-css");
       var M = require("materialize-css");
-      var instance = M.Modal.getInstance(
-        document.getElementById("sellModal")
-      );
+      var instance = M.Modal.getInstance(document.getElementById("sellModal"));
       this.sellId = id;
       instance.open();
     },
