@@ -86,7 +86,7 @@ export default {
                 sessionStorage.setItem('user',data.username);
                 sessionStorage.setItem('kind',data.kind);
                 this.$router.push({
-                    name: "main"
+                    path: "/main/dashboard"
                 });
             },(data)=>{
                 this.$toast("登录失败，原因："+data.msg);

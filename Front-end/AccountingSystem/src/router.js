@@ -20,6 +20,10 @@ export default new Router({
           component:()=>import('./components/pages/DashBoard.vue')
         },
         {
+            path:'dashboard',
+            component:()=>import('./components/pages/DashBoard.vue')
+        },
+        {
           path: 'cargoInfo',
           component:() =>import('./components/pages/CargoInfo.vue')
         },

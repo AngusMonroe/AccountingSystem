@@ -4,6 +4,7 @@ export function mapUrl(inputUrl,debug=true){
         
         var prefix = "http://"+window.location.host;    //部署
 
+        
         var suffix = "";
 
         var m = new Map([
