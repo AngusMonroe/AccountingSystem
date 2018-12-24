@@ -86,6 +86,7 @@
             max="100"
           />
         </p>
+        <p>{{amount}}</p>
       </div>
       <div class="modal-footer">
         <a
