@@ -4,7 +4,7 @@ import os.path
 
 
 jarpath = os.path.join(os.path.abspath('.'), 'D:\\jar')
-startJVM("C:\\Program Files\\Java\\jdk1.8.0_112\\jre\\bin\\jvm.dll", "-ea")
+# startJVM("C:\\Program Files\\Java\\jdk1.8.0_112\\jre\\bin\\jvm.dll", "-ea")
 startJVM("C:\\Program Files\\Java\\jdk1.8.0_112\\jre\\bin\\jvm.dll", "-ea", "-Djava.class.path=%s" % (jarpath + 'AccountingSystem.jar'))
 #ubuntu 中startJVM("/home/geek/Android/jdk1.6.0_43/jre/lib/i386/server/libjvm.so","-ea", "-Djava.class.path=%s" % (jarpath + 'XXX.jar'))
 JDClass = JClass("program.AccountManager")
