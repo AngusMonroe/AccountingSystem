@@ -76,9 +76,9 @@
                 <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-action-invert-colors"></i> Cargo Management</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="css-typography.html">Stock purchase</a>
+                      <li><router-link to="/main/stockPurchase">Stock purchase</router-link >
                       </li>
-                      <li><a href="css-icons.html">Shipment manage</a>
+                      <li><router-link to="/main/shipment">Shipment manage</router-link>
                       </li>
 
                     </ul>
@@ -99,9 +99,9 @@
                 <li class="bold"><a class="collapsible-header waves-effect waves-cyan"><i class="mdi-editor-insert-chart"></i> Accountant Properties</a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a href="css-typography.html">Cargo Information</a>
+                      <li><router-link to="/main/accountant/cargoInfo">Cargo Information</router-link>
                       </li>
-                      <li><a href="css-icons.html">General journal</a>
+                      <li><router-link to="/main/accountant/generalJournal">General journal</router-link>
                       </li>
 
                     </ul>
@@ -157,7 +157,7 @@
 
     </div>
 
-    
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
     <!-- END MAIN -->
     <!-- //////////////////////////////////////////////////////////////////////////// -->
     <!-- START FOOTER -->
@@ -202,7 +202,14 @@ export default {
     elems = document.querySelectorAll(".dropdown-button");
     M.Dropdown.init(elems);
 
+    setTimeout(() => {
+      elems = document.getElementById("slide-out")
+      console.log(elems);
+      M.Sidenav.init(elems);
+    }, 200);
+    
     M.AutoInit();
+    
 
     this.username = sessionStorage.getItem("user");
     this.kind = sessionStorage.getItem("kind");

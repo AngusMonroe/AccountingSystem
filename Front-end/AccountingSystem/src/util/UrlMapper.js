@@ -19,7 +19,8 @@ export function mapUrl(inputUrl,debug=true){
             ['getSummary','/accaountant/getSummary'],
             ['admin_getUserList','/admin/getUserList'],
             ['admin_removeUser','/admin/removeUser'],
-            ['admin_addUser','/admin/addUser']
+            ['admin_addUser','/admin/addUser'],
+            ['item_add','/item/add']
             
             
         ]);
@@ -80,8 +81,16 @@ export function mockResult(inputUrl){
             "data":{
                 "items":[
                     {
-                        "id":123546,
-                        "name":"xxx"
+                        "id":123455,
+                        "name":"ebook",
+                        "price":12.5,
+                        "amount":12
+                    },
+                    {
+                        "id":12356,
+                        "name":"ebook-2",
+                        "price":18,
+                        "amount":7
                     }
                 ]
             }
@@ -92,19 +101,30 @@ export function mockResult(inputUrl){
             "data":{
                 "item":{
                     "id":123456,
-                    "name":"xxx",
+                    "name":"Mac Pro",
                     "price":12.3,
                     "amount":2,
                     "transaction":[
                         {
                             "id":123345345,
-                            "kind":"in/out",
+                            "kind":"in",
                             "amount":12,
-                            "totalPrice":12312.2,
+                            "totalPrice":123.2,
                             "time":"2012-11-20",
                             "operator":{    //操作者
                                 "id":123,
                                 "name":"tom"
+                            }
+                        },
+                        {
+                            "id":123345346,
+                            "kind":"out",
+                            "amount":2,
+                            "totalPrice":1232.2,
+                            "time":"2012-11-21",
+                            "operator":{    //操作者
+                                "id":124,
+                                "name":"jerry"
                             }
                         }
                     ],
@@ -149,6 +169,13 @@ export function mockResult(inputUrl){
             "msg":"OK",
             "data":{
                 
+            }
+        }],
+        ['item_add',{
+            "code":200,  //状态码
+            "msg":"OK",
+            "data":{
+               
             }
         }]
     ]);

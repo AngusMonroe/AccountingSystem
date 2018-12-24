@@ -21,7 +21,7 @@ export default {
     M.AutoInit();
     setTimeout(() => {
         $('body').addClass('loaded');  
-    }, 300);
+    },0);
     
   }
 };
