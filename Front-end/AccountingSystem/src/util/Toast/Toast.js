@@ -30,7 +30,8 @@ Toast.install = function (Vue) {
         }, duration);
     }
     Vue.prototype.$toast = (msg)=>{
-        M.toast({html: msg})
+        M = require("materialize-css");
+        M.toast({html: msg});
     }
 }
 

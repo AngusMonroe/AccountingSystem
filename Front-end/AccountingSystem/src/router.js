@@ -1,15 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-
+import MainPage from './components/MainPage'
 Vue.use(Router)
 
 export default new Router({
+
   routes: [
     {
-      path: '/',
-      name: '',
-      component: () => import(/* webpackChunkName: "about" */ './components/MainPage.vue')
+      path:"/",
+      redirect:"/main"
+    },
+    {
+      path: '/main',
+      name: 'main',
+      component: MainPage,
+      children: [
+        {
+          path: 'cargoInfo',
+          component:() =>import('./components/pages/CargoInfo.vue')
+        }
+      ]
     },
     {
       path: '/login',

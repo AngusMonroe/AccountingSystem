@@ -67,7 +67,7 @@ $(function() {
 
   // Materialize Parallax
   $('.parallax').parallax();
-  $('.modal-trigger').leanModal();
+  //$('.modal-trigger').leanModal();
 
   // Materialize scrollSpy
   $('.scrollspy').scrollSpy();
