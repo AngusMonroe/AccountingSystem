@@ -4,6 +4,7 @@ export function mapUrl(inputUrl,debug=true){
         
         var prefix = "http://"+window.location.host;    //部署
 
+        
         var suffix = "";
 
         var m = new Map([
@@ -19,7 +20,8 @@ export function mapUrl(inputUrl,debug=true){
             ['getSummary','/accaountant/getSummary'],
             ['admin_getUserList','/admin/getUserList'],
             ['admin_removeUser','/admin/removeUser'],
-            ['admin_addUser','/admin/addUser']
+            ['admin_addUser','/admin/addUser'],
+            ['item_add','/item/add']
             
             
         ]);
@@ -40,7 +42,7 @@ export function mockResult(inputUrl){
             "msg":"OK",
             "data":{
                 "username":"tom",
-                "kind":"seller"   //用户类型: seller:售货员 buyer:采购员 accountant 会计   admin管理员
+                "kind":"admin"   //用户类型: seller:售货员 buyer:采购员 accountant 会计   admin管理员
             }
         }],
         ['logout',{
@@ -80,8 +82,16 @@ export function mockResult(inputUrl){
             "data":{
                 "items":[
                     {
-                        "id":123546,
-                        "name":"xxx"
+                        "id":123455,
+                        "name":"ebook",
+                        "price":12.5,
+                        "amount":12
+                    },
+                    {
+                        "id":12356,
+                        "name":"ebook-2",
+                        "price":18,
+                        "amount":7
                     }
                 ]
             }
@@ -92,19 +102,30 @@ export function mockResult(inputUrl){
             "data":{
                 "item":{
                     "id":123456,
-                    "name":"xxx",
+                    "name":"Mac Pro",
                     "price":12.3,
                     "amount":2,
                     "transaction":[
                         {
                             "id":123345345,
-                            "kind":"in/out",
+                            "kind":"in",
                             "amount":12,
-                            "totalPrice":12312.2,
+                            "totalPrice":123.2,
                             "time":"2012-11-20",
                             "operator":{    //操作者
                                 "id":123,
                                 "name":"tom"
+                            }
+                        },
+                        {
+                            "id":123345346,
+                            "kind":"out",
+                            "amount":2,
+                            "totalPrice":1232.2,
+                            "time":"2012-11-21",
+                            "operator":{    //操作者
+                                "id":124,
+                                "name":"jerry"
                             }
                         }
                     ],
@@ -118,8 +139,20 @@ export function mockResult(inputUrl){
             "data":{
                 "detailList":[
                     {
-                        "date":"2012-11-20",
+                        "date":"2018-11-20",
                         "sum":12
+                    },
+                    {
+                        "date":"2018-11-21",
+                        "sum":19
+                    },
+                    {
+                        "date":"2018-12-22",
+                        "sum":10
+                    },
+                    {
+                        "date":"2018-12-23",
+                        "sum":39
                     }
                 ]
             }
@@ -149,6 +182,13 @@ export function mockResult(inputUrl){
             "msg":"OK",
             "data":{
                 
+            }
+        }],
+        ['item_add',{
+            "code":200,  //状态码
+            "msg":"OK",
+            "data":{
+               
             }
         }]
     ]);

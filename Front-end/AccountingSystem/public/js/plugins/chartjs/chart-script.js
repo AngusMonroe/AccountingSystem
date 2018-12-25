@@ -2,6 +2,8 @@
 * Trending line chart
 */
 //var randomScalingFactor = function(){ return Math.round(Math.random()*10)};
+Chart = require("chart.js");
+
 var data = {
 	labels : ["JAN","FEB","MAR","APR","MAY","JUNE","JULY"],
 	datasets : [
@@ -14,16 +16,6 @@ var data = {
 			pointHighlightFill : "#ffffff",
 			pointHighlightStroke : "#ffffff",
 			data: [1, 5, 2, 4, 8, 5, 8]
-		},
-		{
-			label: "Second dataset",
-			fillColor : "rgba(128, 222, 234, 0.3)",
-			strokeColor : "#80deea",
-			pointColor : "#00bcd4",
-			pointStrokeColor : "#80deea",
-			pointHighlightFill : "#80deea",
-			pointHighlightStroke : "#80deea",
-			data: [6, 2, 9, 2, 5, 10, 4]
 		}
 	]
 };
@@ -259,7 +251,7 @@ var polarData = [
 
 
 
-window.onload = function(){
+export function init(){
 	var trendingLineChart = document.getElementById("trending-line-chart").getContext("2d");
 	window.trendingLineChart = new Chart(trendingLineChart).Line(data, {		
 		scaleShowGridLines : true,///Boolean - Whether grid lines are shown across the chart		

@@ -17,11 +17,12 @@
 import $ from "jquery";
 export default {
   mounted: function() {
-    M = require("imports-loader?$=jquery!materialize-css");
-    M.AutoInit();
+    
     setTimeout(() => {
+        M = require("imports-loader?$=jquery!materialize-css");
+        M.AutoInit();
         $('body').addClass('loaded');  
-    }, 300);
+    },100);
     
   }
 };

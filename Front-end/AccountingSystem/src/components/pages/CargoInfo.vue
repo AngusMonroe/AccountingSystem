@@ -28,21 +28,21 @@
             <div class="col s12 m12 l12">
               <div class="card-panel">
                 <div class="row">
-                <form class="col s12">
+                <div class="col s12">
                   <h4 class="header2">Search</h4>
                   <div class="row">
-                    <div class="input-field col s4">
+                    <div class="input-field col m4 s12">
                       <i class="mdi-action-shopping-basket prefix"></i>
-                      <input id="icon_prefix" type="text" class="validate">
+                      <input id="icon_prefix" type="text" class="validate" v-model="query">
                       <label for="icon_prefix">Cargo Name</label>
                     </div>                    
-                    <div class="input-field col s4">
+                    <div class="input-field col m4 s8">
                       <div class="input-field col s12">
-                        <button class="btn cyan waves-effect waves-light" type="submit" name="action"><i class="mdi-action-search"></i> Search</button>
+                        <button @click="search" class="btn cyan waves-effect waves-light" ><i class="mdi-action-search"></i> Search</button>
                       </div>
                     </div>
                   </div>
-                </form>
+                </div>
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@
             </div>
             <!-- End Table -->
 
-          <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+          <br><br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
       </div>
       <!--end container-->
@@ -95,17 +95,22 @@
 export default {
     data: function(){
       return {
-        cargoList:null
+        cargoList:null,
+        query:""
       }
     },
     created:function(){
       
     },
     methods:{
-      search: function(query){
+      search: function(){
+        if(this.query=="")return;
         var payload = {
-          
+          query:this.query
         }
+        this.$post("item_query",payload,(data)=>{
+          this.cargoList = data.result;
+        })
       }
     }
 }
