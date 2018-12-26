@@ -30,12 +30,12 @@ public class Program
 //			AccountManager.sql.insert(Table.Item, s1);
 //			AccountManager.sql.insert(Table.Item, s2);
 //			AccountManager.sql.insert(Table.Item, s3);
-			AccountManager.Login("Zhang", "456");
-			AccountManager.currUser.buyGoods("111", "7");
-			AccountManager.currUser.sellGoods("222", "1");
-			System.out.println(AccountManager.currUser.getItemTable());
-			System.out.println(AccountManager.currUser.getBalanceTable());
-			System.out.println(AccountManager.currUser.getTransTable("1"));
+//			AccountManager.Login("Zhang", "456");
+//			AccountManager.currUser.buyGoods("111", "7");
+//			AccountManager.currUser.sellGoods("222", "1");
+//			System.out.println(AccountManager.currUser.getItemTable());
+//			System.out.println(AccountManager.currUser.getBalanceTable());
+//			System.out.println(AccountManager.currUser.getTransTable("1"));
 			
 		}
 		catch (Exception e)

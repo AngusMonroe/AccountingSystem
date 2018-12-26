@@ -112,12 +112,12 @@ public class Account {
 		return jsArray.toString();
 	}
 	
-	public String  getItemInfo(String id){
+//	public String  getItemInfo(String id){
 		//TODO:
 //		String item = getItem(id);
 //		AccountManager.sql.select(Table.Transaction, column, 
 //				AccountManager.sql.where(table, column, value))
-	}
+//	}
 	
 	public String getBalance() throws SQLException{
 		if(kind != 0 && kind != 3){
