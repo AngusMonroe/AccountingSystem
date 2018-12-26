@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import data.Balance;
 import data.Item;
 import data.Transaction;
+import data.User;
 import program.AccountManager;
 import sql_connection.SqlConnection.Column;
 import sql_connection.SqlConnection.Table;
@@ -29,6 +30,14 @@ public class Account {
 	public Account(int kind, String userID) {
 		this.kind = kind;
 		this.userID = userID;
+	}
+	
+	public String getItem(String id) throws SQLException{
+		String name = AccountManager.sql.select(Table.Item, Column.Name, id);
+		String price = AccountManager.sql.select(Table.Item, Column.Price, id);
+		String amount = AccountManager.sql.select(Table.Item, Column.Amount, id);
+		Item item = new Item(id, name, price, amount);
+		return item.toJSONObject().toString();
 	}
 	
 	public void sellGoods(String id, String amount) throws SQLException{
@@ -74,30 +83,21 @@ public class Account {
 		AccountManager.sql.insert(Table.Transaction, trans);
 	}
 	
-	public String getUserTable() throws SQLException{
-		if(kind != 0){
+	public void addItem(String name, String price) throws RuntimeException{
+		if(kind != 0 && kind != 2){
 			throw new RuntimeException("permission denied");
 		}
-		
-		ArrayList<data.User> users = AccountManager.sql.selectUser();
-		int index = 0;
-		JSONArray jsArray = new JSONArray();
-		for(data.User user : users){
-			JSONObject jsObject = user.toJSONObject();
-            try {
-                jsArray.put(index++, jsObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+		try {
+			String id = nextItemID(); 
+			String amount = "0";
+			String[] values = {id, name, price, amount};
+			AccountManager.sql.insert(Table.Item, values);
+		} catch (Exception e) {
+			throw new RuntimeException("insert item fault");
 		}
-		return jsArray.toString();
 	}
 	
-	public String getItemTable() throws SQLException{
-		if(kind != 0 && kind != 3){
-			throw new RuntimeException("permission denied");
-		}
-		
+	public String getItemList() throws SQLException{		
 		ArrayList<Item> items = AccountManager.sql.selectItem();
 		int index = 0;
 		JSONArray jsArray = new JSONArray();
@@ -112,23 +112,11 @@ public class Account {
 		return jsArray.toString();
 	}
 	
-	public String getTransTable(String id) throws SQLException{
-		if(kind != 0 && kind != 3){
-			throw new RuntimeException("permission denied");
-		}
-		ArrayList<Transaction> trans = AccountManager.sql.selectTransaction();
-		Transaction ans = null;
-		for(Transaction tran : trans) {
-			if(tran.id.equals(id)){
-				ans = tran;
-				break;
-			}
-		}
-		if(ans == null) {
-			throw new RuntimeException("error id");
-		}else{
-			return ans.toJSONObject().toString();
-		}
+	public String  getItemInfo(String id){
+		//TODO:
+//		String item = getItem(id);
+//		AccountManager.sql.select(Table.Transaction, column, 
+//				AccountManager.sql.where(table, column, value))
 	}
 	
 	public String getBalance() throws SQLException{
@@ -152,20 +140,26 @@ public class Account {
 		return bal.toJSONObject().toString();
 	}
 	
-	public void addUser(String name, String pwd, String userKind) throws SQLException{
+	public String getUserList() throws SQLException{
 		if(kind != 0){
 			throw new RuntimeException("permission denied");
 		}
-		ArrayList<data.User> users = AccountManager.sql.selectUser();
-		String[] values = new String[4];
-		values[0] = nextUserID();
-		values[1] = name;
-		values[2] = pwd;
-		values[3] = userKind;
-		AccountManager.sql.insert(Table.User, values);
+		
+		ArrayList<User> users = AccountManager.sql.selectUser();
+		int index = 0;
+		JSONArray jsArray = new JSONArray();
+		for(User user : users){
+			JSONObject jsObject = user.toJSONObject();
+            try {
+                jsArray.put(index++, jsObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+		}
+		return jsArray.toString();
 	}
 	
-	public void deleteUser(String id) throws SQLException{
+	public void removeUser(String id) throws SQLException{
 		if(kind != 0){
 			throw new RuntimeException("permission denied");
 		}
@@ -175,10 +169,23 @@ public class Account {
 		AccountManager.sql.delete(Table.User, ids);
 	}
 	
+	public void addUser(String name, String pwd, String userKind) throws SQLException{
+		if(kind != 0){
+			throw new RuntimeException("permission denied");
+		}
+		ArrayList<User> users = AccountManager.sql.selectUser();
+		String[] values = new String[4];
+		values[0] = nextUserID();
+		values[1] = name;
+		values[2] = pwd;
+		values[3] = userKind;
+		AccountManager.sql.insert(Table.User, values);
+	}
+	
 	private String nextUserID() throws SQLException{
 		int max = 1;
-		ArrayList<data.User> users = AccountManager.sql.selectUser();
-		for(data.User user : users) {
+		ArrayList<User> users = AccountManager.sql.selectUser();
+		for(User user : users) {
 			int id = Integer.parseInt(user.id);
 			if(id > max) {
 				max = id;

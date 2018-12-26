@@ -19,9 +19,8 @@ public class Balance
 	public JSONObject toJSONObject() {
 		JSONObject jsObject = new JSONObject();
 		try {
-			jsObject.put("id", this.id);
-			jsObject.put("profit", this.profit);
 			jsObject.put("date", this.date);
+			jsObject.put("sum", this.profit);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

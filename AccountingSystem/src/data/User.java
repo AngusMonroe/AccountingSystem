@@ -21,9 +21,8 @@ public class User
 		JSONObject jsObject = new JSONObject();
 		try {
 			jsObject.put("id", this.id);
-			jsObject.put("name", this.name);
-			jsObject.put("password", this.password);
 			jsObject.put("kind", this.kind);
+			jsObject.put("name", this.name);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
