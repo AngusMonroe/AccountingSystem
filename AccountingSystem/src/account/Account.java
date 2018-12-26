@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.xml.crypto.Data;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -133,7 +131,7 @@ public class Account {
 		}
 	}
 	
-	public String getBalanceTable() throws SQLException{
+	public String getBalance() throws SQLException{
 		if(kind != 0 && kind != 3){
 			throw new RuntimeException("permission denied");
 		}
