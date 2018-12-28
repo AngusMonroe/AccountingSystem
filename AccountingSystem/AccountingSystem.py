@@ -186,12 +186,16 @@ class Account:  # 账户
         if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
-        Sql.cur.execute("SELECT SUM(TotalPrice), CONVERT(VARCHAR(10), Time, 20) AS Date FROM Transaction GROUP BY Date")
+        Sql.cur.execute("SELECT * FROM Transaction")
         balances = []
+        res = dict()
         for data in Sql.cur.fetchall():
-            balance = Balance(self.nextid("Balance"), data[0], data[1])
-            balances.append(balance.todict())
-        return balances
+            if data[0:10] not in res.keys():
+                res[data[0:10]] = 0.0
+            res[data[0:10]] += data[4]
+        for date in res.keys():
+            balances.append({"date": date, "sum": res[date]})
+        return {"daylist": balances}
 
     def getuserlist(self):
         if not self.state:
