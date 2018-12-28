@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import jsonify
+from flask_cors import CORS
 import sys
 import json
 import os.path
@@ -11,6 +12,7 @@ from AccountingSystem import *
 
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 PORT = 5015
 
