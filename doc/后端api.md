@@ -91,21 +91,14 @@
 ### 地址: /user/login
 ### 方式：POST
 ### 权限：所有人
+### 函数名: Login()
 ### 参数
 * username 用户姓名
 * pwd   密码
 
 ### 响应
-```json
-{
-    "code":200,  //状态码
-    "msg":"OK",
-    "data":{
-        "username":"tom",
-        "kind":""   //用户类型: seller:售货员 buyer:采购员 accountant 会计   admin管理员
-    }
-}
-```
+无返回值
+登录失败抛出RuntimeExceptoin
 
 ---
 
@@ -113,28 +106,21 @@
 ### 地址：  /user/logout
 ### 方式：POST
 ### 权限：所有人
+### 函数名: Logout()
 ### 参数
 无
 
 ### 响应
-```json
-{
-    "code":200,  //状态码
-    "msg":"OK",
-    "data":{
-       
-    }
-}
-```
+无
 
----
 
 ## 查询货物名称库存列表
 ### 地址：  /item/query
 ### 方式：POST
 ### 权限：所有人
+### 函数名: getItem()
 ### 参数
-* query 查询字符串
+* id 货物id
 
 ### 响应
 ```json
@@ -142,7 +128,7 @@
     "code":200,  //状态码
     "msg":"OK",
     "data":{
-        "result":[
+        "data":[
             {
                 "id":123455,
                 "name":"ebook",
@@ -160,20 +146,14 @@
 ### 地址：  /item/sell
 ### 方式：POST
 ### 权限：售货员|管理员
+### 函数名: sellGoods()
 ### 参数
 * id 货物ID
 * amount  数量
 
 ### 响应
-```json
-{
-    "code":200,  //状态码
-    "msg":"OK",
-    "data":{
-        
-    }
-}
-```
+没有权限抛出RuntimeExceptoin
+无
 
 ---
 
@@ -181,40 +161,29 @@
 ### 地址：  /item/buy
 ### 方式：POST
 ### 权限：采购员|管理员
+### 函数名: buyGoods()
 ### 参数
 * id    货物ID
 * amount 数量
 
 ### 响应
-```json
-{
-    "code":200,  //状态码
-    "msg":"OK",
-    "data":{
-       
-    }
-}
-```
+没有权限抛出RuntimeExceptoin
+无
 ---
 
 ## 添加货物
 ### 地址：  /item/add
 ### 方式：POST
 ### 权限：采购员|管理员
+### 函数名: addItem()
 ### 参数
 * name    货物名称
 * price 价格
 
 ### 响应
-```json
-{
-    "code":200,  //状态码
-    "msg":"OK",
-    "data":{
-       
-    }
-}
-```
+无
+没有权限抛出RuntimeExceptoin
+表中已有货物抛出RuntiomException
 
 ---
 
@@ -222,6 +191,7 @@
 ### 地址：  /item/getList
 ### 方式：POST
 ### 权限：所有人
+### 函数名: getItemList()
 ### 参数
 无
 ### 响应
@@ -248,10 +218,13 @@
 ### 地址：  /accountant/item/getInfo
 ### 方式：POST
 ### 权限：会计|管理员
+### 函数名: getItemInfo()
 ### 参数
+// TODO:
 * id    物品ID
 
 ### 响应
+没有权限抛出RuntimeExceptoin
 ```json
 {
     "code":200,  //状态码
@@ -287,11 +260,14 @@
 ### 地址：  /accountant/item/getRecord
 ### 方式：POST
 ### 权限：会计|管理员
+### 函数名: getItemRecord()
 ### 参数
+// TODO:
 * id 物品ID
 * 
 
 ### 响应
+没有权限抛出RuntimeExceptoin
 ```json
 {
     "code":200,  //状态码
@@ -312,9 +288,11 @@
 ### 地址：  /accountant/getSummary
 ### 方式：POST
 ### 权限：会计|管理员
+### 函数名: getBalance()
 ### 参数
 
 ### 响应
+没有权限抛出RuntimeExceptoin
 ```json
 {
     "code":200,  //状态码
@@ -336,10 +314,17 @@
 ### 地址：  /admin/getUserList
 ### 方式：POST
 ### 权限：管理员
+### 函数名: getUserList()
 ### 参数
 
 
 ### 响应
+没有权限抛出RuntimeExceptoin
+说明:
+"kind":0  ->管理员
+"kind":1  ->销售员
+"kind":2  ->采购员
+"kind":3  ->会计
 ```json
 {
     "code":200,  //状态码
@@ -363,19 +348,13 @@
 ### 地址：  /admin/removeUser
 ### 方式：POST
 ### 权限：管理员
+### 函数名: removeUser()
 ### 参数
 * id    用户ID
 
 ### 响应
-```json
-{
-    "code":200,  //状态码
-    "msg":"OK",
-    "data":{
-       
-    }
-}
-```
+没有权限抛出RuntimeExceptoin
+无
 
 
 ---
@@ -384,19 +363,13 @@
 ### 地址：  /admin/addUser
 ### 方式：POST
 ### 权限：管理员
+### 函数名: addUser()
 ### 参数
 * name  用户名
 * password  密码
 * kind  类型
 
 ### 响应
-```json
-{
-    "code":200,  //状态码
-    "msg":"OK",
-    "data":{
-        
-    }
-}
-```
+没有权限抛出RuntimeExceptoin
+无
 
