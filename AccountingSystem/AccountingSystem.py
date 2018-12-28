@@ -12,7 +12,7 @@ def demo():  # 一个样例
     
 
 class Sql:  # 数据库连接
-    connect = pymysql.connect("localhost", "root", "root", "AccountingSystem")  # host, user, password, database
+    connect = pymysql.connect("localhost", "root", "jiaxing+", "AccountingSystem")  # host, user, password, database
     cur = connect.cursor()
 
 
@@ -87,7 +87,7 @@ class Account:  # 账户
         self.state = False
 
     def getitem(self, name):
-        if self.state:
+        if not self.state:
             raise RuntimeError
         Sql.cur.execute("SELECT * FROM Item WHERE Name = '%s'" % name)
         data = Sql.cur.fetchone()
@@ -116,7 +116,7 @@ class Account:  # 账户
         return 
 
     def sellgoods(self, name, amount):
-        if self.state:
+        if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Seller"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("SELECT * FROM Item Where Name = '%s'" % name)
@@ -130,29 +130,32 @@ class Account:  # 账户
         Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Sell", name, amount, price * amount, self.userID, date))
         Sql.connect.commit()
         
-    def buygoods(self, name, amount):
-        if self.state:
+    def buygoods(self, id, amount):
+        id = int(id)
+        amount = int(amount)
+        if not self.state:
             raise RuntimeError
-        if (self.kind != "Administrator") and (self.kind != "Buyer"): raise RuntimeError("Permission denied.")
-        Sql.cur.execute("SELECT * FROM Item Where Name = '%s'" % name)
+        if (self.kind != "Administrator") and (self.kind != "Buyer"):
+            raise RuntimeError("Permission denied.")
+        Sql.cur.execute("SELECT * FROM Item Where Name = '%s'" % id)
         data = Sql.cur.fetchone()
         oldamount = data[3]
-        Sql.cur.execute("UPDATE Item SET Amount = %f Where Name = '%s'" % (oldamount + amount, name))
+        Sql.cur.execute("UPDATE Item SET Amount = %f Where ID = '%s'" % (oldamount + amount, id))
         Sql.connect.commit()
-        price = data[2]
+        price = data[2] `
         date = datetime.datetime.now().strftime("%Y-%m-%d")
-        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", name, amount, - price * amount, self.userID, date))
+        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", id, amount, - price * amount, self.userID, date))
         Sql.connect.commit()
 
     def additem(self, name, price):
-        if self.state:
+        if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Buyer"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("INSERT INTO Item VALUES(%d, '%s', %f, %d)" % (self.nextid("Item"), name, price, 0))
         Sql.connect.commit()
     
     def getitemlist(self):
-        if self.state:
+        if not self.state:
             raise RuntimeError
         Sql.cur.execute("SELECT * FROM Item")
         res = []
@@ -162,7 +165,7 @@ class Account:  # 账户
         return res
 
     def getbalance(self):
-        if self.state:
+        if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("SELECT * FROM Transaction")
@@ -178,7 +181,7 @@ class Account:  # 账户
         return balance.todict()
 
     def getuserlist(self):
-        if self.state:
+        if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("SELECT * FROM User")
@@ -189,7 +192,7 @@ class Account:  # 账户
         return res
 
     def removeuser(self, id):
-        if self.state:
+        if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("DELETE FROM User WHERE ID = %d" % id)
