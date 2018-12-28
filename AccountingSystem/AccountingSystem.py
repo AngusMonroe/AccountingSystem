@@ -11,7 +11,7 @@ def demo():  # 一个样例
     
 
 class Sql:  # 数据库连接
-    connect = pymysql.connect("localhost", "root", "root", "AccountingSystem")  # host, user, password, database
+    connect = pymysql.connect("localhost", "root", "jiaxing+", "AccountingSystem")  # host, user, password, database
     cur = connect.cursor()
 
     def initdata():
@@ -92,11 +92,10 @@ class Account:  # 账户
         self.userID = 0
         self.state = False
 
-    def getitem(self, id):
-        id = int(id)
+    def getitem(self, name):
         if not self.state:
             raise RuntimeError
-        Sql.cur.execute("SELECT * FROM Item WHERE ID = %d" % id)
+        Sql.cur.execute("SELECT * FROM Item WHERE Name = '%s'" % name)
         data = Sql.cur.fetchone()
         item = Item(data[0], data[1], data[2], data[3])
         return item.todict()
