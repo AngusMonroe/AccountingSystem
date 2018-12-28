@@ -1,4 +1,4 @@
-export function mapUrl(inputUrl,debug=false){
+export function mapUrl(inputUrl,debug=true){
         
         // var prefix = "http://localhost:5000";   //调试
         
