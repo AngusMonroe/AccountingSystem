@@ -125,7 +125,7 @@ class Account:  # 账户
             else:
                 raise RuntimeError("Unknown Transaction Kind.")
         
-        iteminfo = getitem(id) + {"transaction": trandicts, "sum": sum}
+        iteminfo = getitembyid(id) + {"transaction": trandicts, "sum": sum}
         return iteminfo
 
     def sellgoods(self, id, amount):
