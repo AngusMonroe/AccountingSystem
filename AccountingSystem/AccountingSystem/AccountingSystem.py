@@ -42,16 +42,16 @@ class Item:  # 货物
 
 class ItemInfo:   # 货物信息
 
-    def __init__(self, id, name, price, amount, trans, sum):
-        self.id = id                # 序号
-        self.name = name            # 名称
-        self.price = price          # 单价
-        self.amount = amount        # 库存
-        self.trans = trans          # 相关交易记录
-        self.sum = sum              # 该货物盈亏
+    def __init__(self, id, name, price, amount, transaction, sum):
+        self.id = id                    # 序号
+        self.name = name                # 名称
+        self.price = price              # 单价
+        self.amount = amount            # 库存
+        self.transaction = transaction  # 相关交易记录
+        self.sum = sum                  # 该货物盈亏
 
     def todict(self):
-        return {"id": self.id, "name": self.name, "price": self.price, "amount": self.amount}
+        return {"id": self.id, "name": self.name, "price": self.price, "amount": self.amount, "transaction": self.transaction, "sum": self.sum}
 
 class Transaction:  # 交易记录
 
@@ -94,18 +94,27 @@ class Account:  # 账户
         item = Item(data[0], data[1], data[2], data[3])
         return item.todict()
 
+    def gettransaction(self, itemid):
+        Sql.cur.execute("SELECT * FROM Transaction WHERE ID = %d" % itemid)
+        transactions
+        for data in Sql.cur.fetchall():
+        
+
     def getiteminfo(self, id):
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
-        getitem(id)
         sum = 0.0
-        Sql.cur.execute("SELECT * FROM Transaction WHERE ItemID = '%s'" % id)
+        trans = []
+        Sql.cur.execute("SELECT * FROM Transaction WHERE ItemID = %d" % id)
         for data in Sql.cur.fetchall():
+            trans.append({})
             if data[1] == "Sell":
                 sum += data[4]
             elif data[1] == "Buy":
                 sum -= data[4]
             else:
                 raise RuntimeError("Unknown Transaction Kind.")
+        iteminfo = getitem(id) + {"transaction": }
+        return 
 
     def sellgoods(self, name, amount):
         if self.state:
