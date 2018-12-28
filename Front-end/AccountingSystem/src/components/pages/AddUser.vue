@@ -57,10 +57,10 @@
                 selected 
                 
               >Choose user role</option>
-              <option value="seller">Seller</option>
-              <option value="buyer">Buyer</option>
-              <option value="accountant">Accountant</option>
-              <option value="admin">Admin</option>
+              <option value="Seller">Seller</option>
+              <option value="Buyer">Buyer</option>
+              <option value="Accountant">Accountant</option>
+              <option value="Administrator">Admin</option>
             </select>
             
           </div>
