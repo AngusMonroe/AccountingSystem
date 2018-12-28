@@ -183,7 +183,7 @@ def accountant_item_getInfo():
             "msg": "ERROR",
             "data": {}
         }
-    return json.dumps(ans, cls=json.JSONEncoder)
+    return json.dumps(ans)
 
 # @app.route("/accountant/item/getRecord", methods=['POST'])
 # def accountant_item_getRecord():
