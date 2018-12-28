@@ -186,7 +186,7 @@ class Account:  # 账户
         if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
-        Sql.cur.execute("SELECT SUM(TotalPrice), Date FROM Transaction GROUP BY Date")
+        Sql.cur.execute("SELECT SUM(TotalPrice), CONVERT(VARCHAR(10), Time, 20) AS Date FROM Transaction GROUP BY Date")
         balances = []
         for data in Sql.cur.fetchall():
             balance = Balance(self.nextid("Balance"), data[0], data[1])
