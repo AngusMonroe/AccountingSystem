@@ -194,7 +194,7 @@ class Account:  # 账户
                 res[data[0:10]] = 0.0
             res[data[0:10]] += data[4]
         for date in res.keys():
-            balances.append({"date": date, "sum": res[date]})
+            balances.append({"date": str(date), "sum": res[date]})
         return {"daylist": balances}
 
     def getuserlist(self):
