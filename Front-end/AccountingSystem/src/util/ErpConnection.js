@@ -13,7 +13,7 @@ Connector.install = function (Vue){
                 }
             }).then((response)=>{
     
-                if(response.data.code == 4001)
+                if(response.data.code == 200)
                 {
                     callback(response.data.data);
                 }else
