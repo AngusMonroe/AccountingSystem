@@ -6,14 +6,13 @@ import datetime
 
 def demo():  # 一个样例
     acc = Account()
-    # print(acc.getitem(1))
-    # acc.sellgoods(1, 2)
-    print(acc.getbalance())
+    acc.login("admin", "admin")
+    acc.adduser("li", "4444", "Accountant")
     print("finished")
     
 
 class Sql:  # 数据库连接
-    connect = pymysql.connect("localhost", "root", "jiaxing+", "AccountingSystem")  # host, user, password, database
+    connect = pymysql.connect("localhost", "root", "root", "AccountingSystem")  # host, user, password, database
     cur = connect.cursor()
 
 
@@ -40,6 +39,19 @@ class Item:  # 货物
     def todict(self):
         return {"id": self.id, "name": self.name, "price": self.price, "amount": self.amount}
 
+
+class ItemInfo:   # 货物信息
+
+    def __init__(self, id, name, price, amount, transaction, sum):
+        self.id = id                    # 序号
+        self.name = name                # 名称
+        self.price = price              # 单价
+        self.amount = amount            # 库存
+        self.transaction = transaction  # 相关交易记录
+        self.sum = sum                  # 该货物盈亏
+
+    def todict(self):
+        return {"id": self.id, "name": self.name, "price": self.price, "amount": self.amount, "transaction": self.transaction, "sum": self.sum}
 
 class Transaction:  # 交易记录
 
@@ -82,6 +94,27 @@ class Account:  # 账户
         item = Item(data[0], data[1], data[2], data[3])
         return item.todict()
 
+    def gettransaction(self, itemid):
+        Sql.cur.execute("SELECT * FROM Transaction WHERE ID = %d" % itemid)
+        transactions
+        for data in Sql.cur.fetchall():
+        
+    def getiteminfo(self, id):
+        if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
+        sum = 0.0
+        trans = []
+        Sql.cur.execute("SELECT * FROM Transaction WHERE ItemID = %d" % id)
+        for data in Sql.cur.fetchall():
+            trans.append({})
+            if data[1] == "Sell":
+                sum += data[4]
+            elif data[1] == "Buy":
+                sum -= data[4]
+            else:
+                raise RuntimeError("Unknown Transaction Kind.")
+        iteminfo = getitem(id) + {"transaction": }
+        return 
+
     def sellgoods(self, name, amount):
         if self.state:
             raise RuntimeError
@@ -97,33 +130,29 @@ class Account:  # 账户
         Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Sell", name, amount, price * amount, self.userID, date))
         Sql.connect.commit()
         
-    def buygoods(self, id, amount):
-        id = int(id)
-        amount = int(amount)
+    def buygoods(self, name, amount):
         if self.state:
             raise RuntimeError
-        if (self.kind != "Administrator") and (self.kind != "Buyer"):
-            raise RuntimeError("Permission denied.")
-        Sql.cur.execute("SELECT * FROM Item Where ID = '%s'" % id)
+        if (self.kind != "Administrator") and (self.kind != "Buyer"): raise RuntimeError("Permission denied.")
+        Sql.cur.execute("SELECT * FROM Item Where Name = '%s'" % name)
         data = Sql.cur.fetchone()
         oldamount = data[3]
-        Sql.cur.execute("UPDATE Item SET Amount = %f Where ID = '%s'" % (oldamount + amount, id))
+        Sql.cur.execute("UPDATE Item SET Amount = %f Where Name = '%s'" % (oldamount + amount, name))
         Sql.connect.commit()
         price = data[2]
         date = datetime.datetime.now().strftime("%Y-%m-%d")
-        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", id, amount, price * amount, self.userID, date))
+        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", name, amount, - price * amount, self.userID, date))
         Sql.connect.commit()
 
     def additem(self, name, price):
-        if not self.state:
+        if self.state:
             raise RuntimeError
-        if (self.kind != "Administrator") and (self.kind != "Buyer"):
-            raise RuntimeError("Permission denied.")
+        if (self.kind != "Administrator") and (self.kind != "Buyer"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("INSERT INTO Item VALUES(%d, '%s', %f, %d)" % (self.nextid("Item"), name, price, 0))
         Sql.connect.commit()
     
     def getitemlist(self):
-        if not self.state:
+        if self.state:
             raise RuntimeError
         Sql.cur.execute("SELECT * FROM Item")
         res = []
@@ -133,7 +162,7 @@ class Account:  # 账户
         return res
 
     def getbalance(self):
-        if not self.state:
+        if self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("SELECT * FROM Transaction")
@@ -149,19 +178,18 @@ class Account:  # 账户
         return balance.todict()
 
     def getuserlist(self):
-        if not self.state:
+        if self.state:
             raise RuntimeError
         if (self.kind != "Administrator"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("SELECT * FROM User")
         res = []
         for data in Sql.cur.fetchall():
-            item = Item(data[0], data[1], data[2], data[3])
-            res.append(item.todict())
+            user = User(data[0], data[1], data[2], data[3])
+            res.append(user.todict())
         return res
 
     def removeuser(self, id):
-        # id = int(id)
-        if not self.state:
+        if self.state:
             raise RuntimeError
         if (self.kind != "Administrator"): raise RuntimeError("Permission denied.")
         Sql.cur.execute("DELETE FROM User WHERE ID = %d" % id)
