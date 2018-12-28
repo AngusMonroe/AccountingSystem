@@ -83,6 +83,20 @@ export default {
                 pwd:this.password
             };
             this.$post("login",payload,(data)=>{
+                switch(data.kind){
+                  case "Administrator":
+                    data.kind = "admin";
+                    break;
+                  case "Seller":
+                    data.kind = "seller";
+                    break;
+                  case "Buyer":
+                    data.kind = "buyer";
+                    break;
+                  case "Accountant":
+                    data.kind = "accountant";
+                    break;
+                }
                 sessionStorage.setItem('user',data.username);
                 sessionStorage.setItem('kind',data.kind);
                 this.$router.push({
