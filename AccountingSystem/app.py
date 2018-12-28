@@ -73,7 +73,7 @@ def item_query():
             "code": 200,  # 状态码
             "msg": "OK",
             "data": {
-                "data": [item]
+                "result": [item]
             }
         }
     else:
@@ -169,7 +169,19 @@ def item_getList():
 @app.route("/accountant/item/getInfo", methods=['POST'])
 def accountant_item_getInfo():
     data = request.form
-    return acc.accountant_item_getInfo(data['id'])
+    try:
+        ans = {
+            "code": 200,  # 状态码
+            "msg": "OK",
+            "data": acc.getiteminfo(data['id'])
+        }
+    except RuntimeError:
+        ans = {
+            "code": 150,  # 状态码
+            "msg": "ERROR",
+            "data": {}
+        }
+    return json.dumps(ans)
 
 
 # @app.route("/accountant/item/getRecord", methods=['POST'])
