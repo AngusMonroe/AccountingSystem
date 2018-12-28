@@ -92,14 +92,23 @@ class Account:  # 账户
         self.userID = 0
         self.state = False
 
-    def getitem(self, name):
+    def getitembyname(self, name):
         if not self.state:
             raise RuntimeError
         Sql.cur.execute("SELECT * FROM Item WHERE Name = '%s'" % name)
         data = Sql.cur.fetchone()
         item = Item(data[0], data[1], data[2], data[3])
         return item.todict()
-        
+
+    def getitembyid(self, id):
+        id = int(id)
+        if not self.state:
+            raise RuntimeError
+        Sql.cur.execute("SELECT * FROM Item WHERE ID = %d" % id)
+        data = Sql.cur.fetchone()
+        item = Item(data[0], data[1], data[2], data[3])
+        return item.todict()
+
     def getiteminfo(self, id):
         id = int(id)
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
