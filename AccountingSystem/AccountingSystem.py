@@ -71,10 +71,10 @@ class Account:  # 账户
         self.userID = 0
         self.state = False
 
-    def getitem(self, name):
+    def getitem(self, id):
         if not self.state:
             raise RuntimeError
-        Sql.cur.execute("SELECT * FROM Item WHERE Name = '%s'" % name)
+        Sql.cur.execute("SELECT * FROM Item WHERE ID = %d" % id)
         data = Sql.cur.fetchone()
         item = Item(data[0], data[1], data[2], data[3])
         return item.todict()
@@ -121,7 +121,7 @@ class Account:  # 账户
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Buyer"):
             raise RuntimeError("Permission denied.")
-        Sql.cur.execute("SELECT * FROM Item Where Name = %d" % id)
+        Sql.cur.execute("SELECT * FROM Item Where ID = %d" % id)
         data = Sql.cur.fetchone()
         oldamount = data[3]
         Sql.cur.execute("UPDATE Item SET Amount = %f Where ID = %d" % (oldamount + amount, id))
