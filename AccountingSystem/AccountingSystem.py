@@ -5,13 +5,34 @@ import datetime
 
 
 def demo():  # 一个样例
+    Sql.initdata()
     acc = Account()
     print("finished")
     
 
 class Sql:  # 数据库连接
-    connect = pymysql.connect("localhost", "root", "jiaxing+", "AccountingSystem")  # host, user, password, database
+    connect = pymysql.connect("localhost", "root", "root", "AccountingSystem")  # host, user, password, database
     cur = connect.cursor()
+
+    def initdata():
+        sql = \
+            "set sql_safe_updates = 0;" +\
+            "delete from user;" +\
+            "delete from item;" +\
+            "delete from transaction;" +\
+            "delete form balance;" +\
+            "insert into user values(1, 'admin', 'admin', 'Administrator');" +\
+            "insert into user values(2, 'zhao', '111111', 'Seller');" +\
+            "insert into user values(3, 'qian', '222222', 'Buyer');" +\
+            "insert into user values(4, 'sun', '333333', 'Accountant');" +\
+            "insert into item values(1, 'apple', 2.25, 5000);" +\
+            "insert into item values(2, 'banana', 1.8, 3000);" +\
+            "insert into item values(3, 'orange', 3.5, 2000);" +\
+            "insert into item values(4, 'grape', 4.5, 1000);" +\
+            "insert into item values(5, 'melon', 12.0, 200);" +\
+            "insert into item values(6, 'coconut', 25.0, 100);"
+        Sql.cur.execute(sql)
+        Sql.connect.commit()
 
 
 class User:  # 用户
@@ -72,6 +93,7 @@ class Account:  # 账户
         self.state = False
 
     def getitem(self, id):
+        id = int(id)
         if not self.state:
             raise RuntimeError
         Sql.cur.execute("SELECT * FROM Item WHERE ID = %d" % id)
@@ -80,6 +102,7 @@ class Account:  # 账户
         return item.todict()
         
     def getiteminfo(self, id):
+        id = int(id)
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
         sum = 0.0
         trandicts = []
@@ -132,6 +155,8 @@ class Account:  # 账户
         Sql.connect.commit()
 
     def additem(self, name, price):
+        id = int(id)
+        price = float(price)
         if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Buyer"): raise RuntimeError("Permission denied.")
@@ -176,6 +201,7 @@ class Account:  # 账户
         return res
 
     def removeuser(self, id):
+        id = int(id)
         if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator"): raise RuntimeError("Permission denied.")
