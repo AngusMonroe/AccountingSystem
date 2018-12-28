@@ -165,7 +165,6 @@ class Account:  # 账户
         Sql.connect.commit()
 
     def additem(self, name, price):
-        id = int(id)
         price = float(price)
         if not self.state:
             raise RuntimeError
