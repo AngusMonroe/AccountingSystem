@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "AccountingSystem", "AccountingSystem\AccountingSystem.pyproj", "{639B0B96-E75D-4400-89B2-E0C5C2D5DCE7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{639B0B96-E75D-4400-89B2-E0C5C2D5DCE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{639B0B96-E75D-4400-89B2-E0C5C2D5DCE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E66C149-2C1B-4ADD-B118-1F2EEE8F64A8}
+	EndGlobalSection
+EndGlobal
