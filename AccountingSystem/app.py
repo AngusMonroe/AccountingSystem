@@ -39,7 +39,7 @@ def user_login():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 100,  # 状态码
             "msg": "ERROR",
             "data": {
                 "username": '',
@@ -78,7 +78,7 @@ def item_query():
         }
     else:
         ans = {
-            "code": 200,  # 状态码
+            "code": 110,  # 状态码
             "msg": "ERROR",
             "data": {
                 "data": []
@@ -99,7 +99,7 @@ def item_sell():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 120,  # 状态码
             "msg": "ERROR",
             "data": {}
         }
@@ -118,7 +118,7 @@ def item_buy():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 130,  # 状态码
             "msg": "ERROR",
             "data": {}
         }
@@ -137,7 +137,7 @@ def item_add():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 140,  # 状态码
             "msg": "ERROR",
             "data": {}
         }
@@ -157,7 +157,7 @@ def item_getList():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 150,  # 状态码
             "msg": "ERROR",
             "data": {
                 "items": []
@@ -166,10 +166,10 @@ def item_getList():
     return json.dumps(ans)
 
 
-# @app.route("/accountant/item/getInfo", methods=['POST'])
-# def accountant_item_getInfo():
-#     data = request.form
-#     return acc.accountant_item_getInfo(data['id'])
+@app.route("/accountant/item/getInfo", methods=['POST'])
+def accountant_item_getInfo():
+    data = request.form
+    return acc.accountant_item_getInfo(data['id'])
 
 
 # @app.route("/accountant/item/getRecord", methods=['POST'])
@@ -191,7 +191,7 @@ def accountant_getSummary():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 160,  # 状态码
             "msg": "ERROR",
             "data": {
                 "detailList": []
@@ -216,7 +216,7 @@ def admin_getUserList():
         }
     else:
         ans = {
-            "code": 200,  # 状态码
+            "code": 170,  # 状态码
             "msg": "ERROR",
             "data": {
                 "userList": []
@@ -237,7 +237,7 @@ def admin_removeUser():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 180,  # 状态码
             "msg": "ERROR",
             "data": {}
         }
@@ -248,7 +248,7 @@ def admin_removeUser():
 def admin_addUser():
     data = request.form
     try:
-        acc.adduser(data['password'], data['kind'])
+        acc.adduser(data['name'], data['password'], data['kind'])
         ans = {
             "code": 200,  # 状态码
             "msg": "OK",
@@ -256,7 +256,7 @@ def admin_addUser():
         }
     except RuntimeError:
         ans = {
-            "code": 200,  # 状态码
+            "code": 190,  # 状态码
             "msg": "ERROR",
             "data": {}
         }
