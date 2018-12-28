@@ -190,11 +190,11 @@ class Account:  # 账户
         balances = []
         res = dict()
         for data in Sql.cur.fetchall():
-            if data[0:10] not in res.keys():
-                res[data[0:10]] = 0.0
-            res[data[0:10]] += data[4]
+            if data[6][0:10] not in res.keys():
+                res[data[6][0:10]] = 0.0
+            res[data[6][0:10]] += data[4]
         for date in res.keys():
-            balances.append({"date": str(date), "sum": res[date]})
+            balances.append({"date": date, "sum": res[date]})
         return {"daylist": balances}
 
     def getuserlist(self):
