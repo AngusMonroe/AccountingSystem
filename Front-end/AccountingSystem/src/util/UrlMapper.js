@@ -42,7 +42,7 @@ export function mockResult(inputUrl){
             "msg":"OK",
             "data":{
                 "username":"tom",
-                "kind":"admin"   //用户类型: seller:售货员 buyer:采购员 accountant 会计   admin管理员
+                "kind":"Administrator"   //用户类型: seller:售货员 buyer:采购员 accountant 会计   admin管理员
             }
         }],
         ['logout',{
