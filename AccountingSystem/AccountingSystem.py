@@ -71,7 +71,7 @@ class Transaction:  # 交易记录
         self.time = time                 # 时间
 
     def todict(self):
-        return {"id": self.id, "kind": self.kind, "itemID": self.itemID, "amount": self.amount, "totalPrice": self.totalPrice, "userID": self.userID, "time": self.time}
+        return {"id": self.id, "kind": self.kind, "itemID": self.itemID, "amount": self.amount, "totalPrice": self.totalPrice, "userID": self.userID, "time": str(self.time)}
 
 
 class Balance:  # 收支
@@ -117,16 +117,21 @@ class Account:  # 账户
         Sql.cur.execute("SELECT * FROM Transaction WHERE ItemID = %d" % id)
         for data in Sql.cur.fetchall():
             trans = Transaction(data[0], data[1], data[2], data[3], data[4], data[5], data[6])
-            trandicts.append(trans.todict)
+            dic = trans.todict().copy()
+            dic.update({"operator": {"id": id}})
+            trandicts.append(dic)
             if data[1] == "Sell":
                 sum += data[4]
             elif data[1] == "Buy":
                 sum -= data[4]
             else:
                 raise RuntimeError("Unknown Transaction Kind.")
-        
-        iteminfo = getitembyid(id) + {"transaction": trandicts, "sum": sum}
-        return iteminfo
+
+        dic = self.getitembyid(id).copy()
+        dic.update({"transaction": trandicts, "sum": sum})
+        print(dic)
+        print({"transaction": trandicts, "sum": sum})
+        return dic
 
     def sellgoods(self, id, amount):
         id = int(id)
@@ -142,6 +147,7 @@ class Account:  # 账户
         Sql.connect.commit()
         price = data[2]
         date = datetime.datetime.now().strftime("%Y-%m-%d")
+        date = str(date)
         Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Sell", id, amount, price * amount, self.userID, date))
         Sql.connect.commit()
         
@@ -159,7 +165,8 @@ class Account:  # 账户
         Sql.connect.commit()
         price = data[2]
         date = datetime.datetime.now().strftime("%Y-%m-%d")
-        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", id, amount, - price * amount, self.userID, date))
+        date = str(date)
+        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", id, amount, price * amount, self.userID, date))
         Sql.connect.commit()
 
     def additem(self, name, price):
@@ -185,9 +192,10 @@ class Account:  # 账户
         if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
-        Sql.cur.execute("SELECT * FROM Transaction")
+        Sql.cur.execute("SELECT SUM() FROM Transaction GROUP BY Date")
         profit = 0.0
         date = datetime.datetime.now().strftime("%Y-%m-%d")
+        date = str(date)
         for data in Sql.cur.fetchall():
             if date == data[6]:
                 if data[1] == "Sell":

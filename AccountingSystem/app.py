@@ -173,7 +173,9 @@ def accountant_item_getInfo():
         ans = {
             "code": 200,  # 状态码
             "msg": "OK",
-            "data": acc.getiteminfo(data['id'])
+            "data": {
+                "item": acc.getiteminfo(data['id'])
+            }
         }
     except RuntimeError:
         ans = {
@@ -181,8 +183,7 @@ def accountant_item_getInfo():
             "msg": "ERROR",
             "data": {}
         }
-    return json.dumps(ans)
-
+    return json.dumps(ans, cls=json.JSONEncoder)
 
 # @app.route("/accountant/item/getRecord", methods=['POST'])
 # def accountant_item_getRecord():
