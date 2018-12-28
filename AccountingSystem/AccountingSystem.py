@@ -120,13 +120,7 @@ class Account:  # 账户
             dic = trans.todict().copy()
             dic.update({"operator": {"id": id}})
             trandicts.append(dic)
-            if data[1] == "Sell":
-                sum += data[4]
-            elif data[1] == "Buy":
-                sum -= data[4]
-            else:
-                raise RuntimeError("Unknown Transaction Kind.")
-
+            sum += data[4]
         dic = self.getitembyid(id).copy()
         dic.update({"transaction": trandicts, "sum": sum})
         print(dic)
@@ -166,7 +160,7 @@ class Account:  # 账户
         price = data[2]
         date = datetime.datetime.now().strftime("%Y-%m-%d")
         date = str(date)
-        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", id, amount, price * amount, self.userID, date))
+        Sql.cur.execute("INSERT INTO Transaction VALUES(%d, '%s', %d, %d, %f, %d, '%s')" % (self.nextid("Transaction"), "Buy", id, amount, - price * amount, self.userID, date))
         Sql.connect.commit()
 
     def additem(self, name, price):
@@ -192,18 +186,12 @@ class Account:  # 账户
         if not self.state:
             raise RuntimeError
         if (self.kind != "Administrator") and (self.kind != "Accountant"): raise RuntimeError("Permission denied.")
-        Sql.cur.execute("SELECT SUM() FROM Transaction GROUP BY Date")
-        profit = 0.0
-        date = datetime.datetime.now().strftime("%Y-%m-%d")
-        date = str(date)
+        Sql.cur.execute("SELECT SUM(TotalPrice), Date FROM Transaction GROUP BY Date")
+        balances = []
         for data in Sql.cur.fetchall():
-            if date == data[6]:
-                if data[1] == "Sell":
-                    profit -= data[4]
-                else:
-                    profit += data[4]
-        balance = Balance(self.nextid("Balance"), profit, date)
-        return balance.todict()
+            balance = Balance(self.nextid("Balance"), data[0], data[1])
+            balances.append(balance.todict())
+        return balances
 
     def getuserlist(self):
         if not self.state:
