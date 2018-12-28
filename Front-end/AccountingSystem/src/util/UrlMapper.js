@@ -17,7 +17,7 @@ export function mapUrl(inputUrl,debug=false){
             ['item_buy','/item/buy'],
             ['item_getList','/item/getList'],
             ['item_getInfo','/accountant/item/getInfo'],
-            ['getSummary','/accaountant/getSummary'],
+            ['getSummary','/accountant/getSummary'],
             ['admin_getUserList','/admin/getUserList'],
             ['admin_removeUser','/admin/removeUser'],
             ['admin_addUser','/admin/addUser'],

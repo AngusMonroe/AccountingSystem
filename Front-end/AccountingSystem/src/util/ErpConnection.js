@@ -21,12 +21,14 @@ Connector.install = function (Vue){
                     //全局错误处理策略
                     let time = 1500;
                     switch(response.data.code){
-                        case 4002://用户未登录
-                            if(response.data.msg.indexOf("login first") != -1){
-                                setTimeout(()=>{
-                                    window.location.href="#/";
-                                },2000)
-                            }
+                        case 100://用户未登录  TODO 确定错误码
+                            sessionStorage.removeItem("user");
+                            sessionStorage.removeItem("kind");
+                            this.$toast("请先登陆");
+                            setTimeout(() => {
+                                window.location.href="#/";
+                            }, 2000);
+                            
                             break;
                         default:
                             errHandler(response.data);
