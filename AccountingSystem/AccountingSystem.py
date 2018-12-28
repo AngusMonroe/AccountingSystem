@@ -5,8 +5,9 @@ import datetime
 
 
 def demo():  # 一个样例
-    Sql.initdata()
     acc = Account()
+    acc.login("admin", "admin")
+    acc.sellgoods(1,10)
     print("finished")
     
 
@@ -14,7 +15,7 @@ class Sql:  # 数据库连接
     connect = pymysql.connect("localhost", "root", "jiaxing+", "AccountingSystem")  # host, user, password, database
     cur = connect.cursor()
 
-    def initdata(self):
+    def initdata():
         sql = \
             "set sql_safe_updates = 0; " +\
             "delete from user; " +\
@@ -195,7 +196,8 @@ class Account:  # 账户
             res[data[6][0:10]] += data[4]
         for date in res.keys():
             balances.append({"date": date, "sum": res[date]})
-        return {"daylist": balances}
+
+        return balances
 
     def getuserlist(self):
         if not self.state:
