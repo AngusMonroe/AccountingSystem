@@ -64,7 +64,7 @@
                     <td>{{transaction.kind}}</td>
                     <td>{{transaction.amount}}</td>
                     <td>{{transaction.time}}</td>
-                    <td>{{transaction.operator.name}}</td>
+                    <td>{{transaction.operator.id}}</td>
                     <td>$ {{transaction.totalPrice}}</td>
                   </tr>
                   
