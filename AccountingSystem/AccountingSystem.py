@@ -15,7 +15,7 @@ class Sql:  # 数据库连接
     connect = pymysql.connect("localhost", "root", "jiaxing+", "AccountingSystem")  # host, user, password, database
     cur = connect.cursor()
 
-    def initdata():
+    def initdata(self):
         sql = \
             "set sql_safe_updates = 0; " +\
             "delete from user; " +\
