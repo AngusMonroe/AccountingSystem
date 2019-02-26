@@ -199,3 +199,5 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+.vs

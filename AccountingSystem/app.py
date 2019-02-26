@@ -65,7 +65,7 @@ def user_logout():
 def item_query():
     data = request.form
     try:
-        item = acc.getitem(data['query'])
+        item = acc.getitembyname(data['query'])
     except RuntimeError:
         item = []
     if item:
@@ -129,7 +129,7 @@ def item_buy():
 def item_add():
     data = request.form
     try:
-        acc.additem(data['id'], float(data['price']))
+        acc.additem(data['name'], float(data['price']))
         ans = {
             "code": 200,  # 状态码
             "msg": "OK",
@@ -199,7 +199,7 @@ def accountant_getSummary():
             "code": 200,  # 状态码
             "msg": "OK",
             "data": {
-                "detailList": [balance]
+                "detailList": balance
             }
         }
     except RuntimeError:
